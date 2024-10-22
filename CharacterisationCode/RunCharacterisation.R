@@ -45,6 +45,6 @@ result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observati
                                                                    ageGroup = ageGroup
 )
 
-#result_clinicalRecords,
+
 
 omopgenerics::exportSummarisedResult(snapshot, results_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod, minCellCount = 5, path = here::here("Results"), fileName = "results.csv")
