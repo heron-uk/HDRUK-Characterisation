@@ -47,4 +47,4 @@ result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observati
 
 #result_clinicalRecords,
 
-omopgenerics::exportSummarisedResult(snapshot, result_recordCounts, result_inObservation, result_observationPeriod, minCellCount = 5, path = here::here("Results"), fileName = "results.csv")
+omopgenerics::exportSummarisedResult(snapshot, results_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod, minCellCount = 5, path = here::here("Results"), fileName = "results.csv")
