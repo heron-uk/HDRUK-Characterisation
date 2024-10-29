@@ -21,9 +21,7 @@ ui <- bslib::page_navbar(
     title = "Summary",
     icon = shiny::icon("file-alt"),
     div(
-      OmopViewer::cardSummary(omopgenerics::bind(cdm_snapshot,summarised_clinical_records, summarised_record_counts, summarised_in_observation, summarised_observation_period))
-
-    )
+      OmopViewer::cardSummary(data ))
     
   ),
   bslib::nav_panel(
