@@ -1,8 +1,10 @@
 # Start
+start_time <- Sys.time()
 log_file <- paste0(here::here("Results"),"/characterisation_log.txt")
 
 log_message <- function(message) {
   cat(paste(Sys.time(), "-", message, "\n"), file = log_file, append = TRUE)
+  cli::cli_inform(paste(Sys.time(), "-", message, "\n"))
 }
 
 log_message("Start time recorded.")
