@@ -12,11 +12,11 @@ library(readr)
 library(shiny)
 library(visOmopResults)
 
-data_file<-list.files(here("data"), recursive = TRUE,
+data_file<-list.files(here::here("data"), recursive = TRUE,
                     full.names = TRUE)
 
-results_file<-data_file[stringr::str_detect(data_file, ".csv")]
-results_file<-results_file[stringr::str_detect(results_file, "result")]
+data_file<-data_file[stringr::str_detect(data_file, ".csv")]
+results_file<-data_file[stringr::str_detect(data_file, "characterisation")]
 results <- list()
 for(i in seq_along(results_file)){
   results[[i]]<-omopgenerics::importSummarisedResult(path=results_file[[i]])
@@ -24,3 +24,11 @@ for(i in seq_along(results_file)){
 }
 data <- dplyr::bind_rows(results) |>OmopViewer::correctSettings()
 
+bm_file<-data_file[stringr::str_detect(data_file, "timing")]
+bm <- list()
+for(i in seq_along(bm_file)){
+  bm[[i]]<-read.csv(bm_file[[i]])
+  
+}
+bm <- dplyr::bind_rows(bm)
+bm

@@ -1,6 +1,6 @@
 # Start
 start_time <- Sys.time()
-log_file <- paste0(here::here("Results"),"/characterisation_log.txt")
+log_file <- paste0(here::here("Results"),"/", db_name, "_characterisation_log.txt")
 
 log_message <- function(message) {
   cat(paste(Sys.time(), "-", message, "\n"), file = log_file, append = TRUE)
@@ -59,22 +59,9 @@ result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observati
 # Combine results and export
 result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod)
 omopgenerics::exportSummarisedResult(result, minCellCount = 5, path = here::here("Results"), fileName = paste0(
-  "result_", db_name, ".csv"))
+  "result_characterisation_", db_name, ".csv"))
 
 
-# Zip the results
-log_message("Zipping results")
-files_to_zip <- list.files(here::here("Results"))
-files_to_zip <- files_to_zip[stringr::str_detect(files_to_zip,
-                                        db_name)]
-files_to_zip <- files_to_zip[stringr::str_detect(files_to_zip,
-                                        ".csv")]
-
-zip::zip(zipfile = file.path(paste0(
-  here::here("Results"), "/results_", db_name, ".zip"
-)),
-files = files_to_zip,
-root = here::here("Results"))
 
 # Calculate duration and log
 dur <- abs(as.numeric(Sys.time() - start_time, units = "secs"))
@@ -82,4 +69,16 @@ log_message(paste("Study code finished. Code ran in", floor(dur / 60), "min and"
 
 # Close connection
 cdm_disconnect(cdm)
-log_message("Database connection closed.")
+log_message("Database connection closed")
+
+# Zip the results
+files_to_zip <- list.files(here::here("Results"))
+files_to_zip <- files_to_zip[stringr::str_detect(files_to_zip, db_name)]
+
+log_message("Zipping results") 
+
+zip::zip(zipfile = file.path(paste0(
+  here::here("Results"), "/results_", db_name, ".zip"
+)),
+files = files_to_zip,
+root = here::here("Results"))
