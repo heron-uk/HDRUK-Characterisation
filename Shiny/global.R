@@ -24,11 +24,3 @@ for(i in seq_along(results_file)){
 }
 data <- dplyr::bind_rows(results) |>OmopViewer::correctSettings()
 
-bm_file<-data_file[stringr::str_detect(data_file, "timing")]
-bm <- list()
-for(i in seq_along(bm_file)){
-  bm[[i]]<-read.csv(bm_file[[i]])
-  
-}
-bm <- dplyr::bind_rows(bm)
-bm
