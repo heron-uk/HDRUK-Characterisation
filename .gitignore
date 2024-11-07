@@ -5,9 +5,11 @@
 # Session Data files
 .RData
 .RDataTmp
-
-# User-specific files
+.Rproj.user
+.Rhistory
+.RData
 .Ruserdata
+
 
 # Example code in package build process
 *-Ex.R
@@ -49,7 +51,10 @@ po/*~
 rsconnect/
 
 # Results
-/Results/*.csv
+CharacterisationCode/Results/*
 
 # Ignore Mac DS_Store files
 .DS_Store
+
+
+Shiny/data/*
