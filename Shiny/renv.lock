@@ -1218,13 +1218,9 @@
     },
     "omopgenerics": {
       "Package": "omopgenerics",
-      "Version": "0.3.1.900",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "omopgenerics",
-      "RemoteUsername": "darwin-eu-dev",
-      "RemoteSha": "3a0198dc67b1d867f3dd1e102d7b1e4423a75832",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "cli",
@@ -1240,7 +1236,7 @@
         "tidyr",
         "vctrs"
       ],
-      "Hash": "4ee9efe97073740bc75285367b3e78d0"
+      "Hash": "c17db6329c631b9010951ad112341ba3"
     },
     "openssl": {
       "Package": "openssl",

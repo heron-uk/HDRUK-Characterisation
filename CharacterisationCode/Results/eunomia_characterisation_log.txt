@@ -1,0 +1,8 @@
+2024-10-31 14:22:11.740451 - Start time recorded. 
+2024-10-31 14:22:11.769508 - Getting cdm snapshot 
+2024-10-31 14:22:12.452705 - Getting population characteristics 
+2024-10-31 14:22:17.477882 - Summarising clinical records 
+2024-10-31 14:22:22.656914 - Summarising record counts 
+2024-10-31 14:22:24.018776 - Summarising in observation records and person-days 
+2024-10-31 14:22:28.726879 - Summarising observation period 
+2024-10-31 14:22:33.580754 - Study code finished. Code ran in 0 min and 21 sec 

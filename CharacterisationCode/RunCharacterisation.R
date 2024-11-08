@@ -22,6 +22,7 @@ snapshot <- OmopSketch::summariseOmopSnapshot(cdm)
 log_message("Getting population characteristics")
 result_populationCharacteristics <- CohortConstructor::demographicsCohort(cdm, "population", ageRange = ageGroup, sex = "Both" ) |>
   PatientProfiles::addDemographicsQuery(sex = TRUE, age = FALSE, ageGroup = ageGroup) |>
+  CohortConstructor::requireInDateRange(dateRange = as.Date(c("2012-01-01", "2025-01-01")))|>
   CohortCharacteristics::summariseCharacteristics(strata = list("sex", "age_group") )
 
 # Summarize clinical records
@@ -35,7 +36,9 @@ result_clinicalRecords<- OmopSketch::summariseClinicalRecords(cdm,
 log_message("Summarising record counts")
 result_recordCounts <- OmopSketch::summariseRecordCount(cdm,  tableName,
                                                    sex = sex, 
-                                                   ageGroup = ageGroup) 
+                                                   ageGroup = ageGroup,
+                                                   interval = "years") 
+  
 
 
 
