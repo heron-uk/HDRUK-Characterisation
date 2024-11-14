@@ -9,9 +9,10 @@ log_message <- function(message) {
 
 log_message("Start time recorded.")
 
-tableName <- "drug_exposure"
+tableName <- c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence", 
+               "device_exposure", "measurement" , "observation", "death")
 sex <- TRUE # FALSE
-ageGroup <- list("0 to 50"= c(0,50), "51 to 100"=c(51,100)) # NULL
+ageGroup <- list(c(0,19), c(20, 39),c(40, 59), c(60, 79), c(80, Inf) ) # NULL
 ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 
 # Snapshot
@@ -24,6 +25,12 @@ result_populationCharacteristics <- CohortConstructor::demographicsCohort(cdm, "
   PatientProfiles::addDemographicsQuery(sex = TRUE, age = FALSE, ageGroup = ageGroup) |>
   CohortConstructor::requireInDateRange(dateRange = as.Date(c("2012-01-01", "2025-01-01")))|>
   CohortCharacteristics::summariseCharacteristics(strata = list("sex", "age_group") )
+
+log_message("Summarising missing data")
+result_missingData <- OmopSketch::summariseMissingData(cdm , omopTableName = tableName, sex = sex, ageGroup = ageGroup, year = TRUE )
+
+log_message("Summarising all concept counts")
+result_allConceptCount <- OmopSketch::summariseAllConceptCounts(cdm, omopTableName = tableName, sex = sex, ageGroup = ageGroup, year = TRUE)
 
 # Summarize clinical records
 log_message("Summarising clinical records")
@@ -60,7 +67,7 @@ result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observati
 )
 
 # Combine results and export
-result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod)
+result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_missingData, result_allConceptCount, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod)
 omopgenerics::exportSummarisedResult(result, minCellCount = 5, path = here::here("Results"), fileName = paste0(
   "result_characterisation_", db_name, ".csv"))
 

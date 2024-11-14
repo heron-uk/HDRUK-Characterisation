@@ -366,6 +366,386 @@ ui <- bslib::page_navbar(
     )
   ),
   bslib::nav_panel(
+    title = "Summarise missing data",
+    icon = shiny::icon("clipboard-list"),
+    bslib::layout_sidebar(
+      sidebar = bslib::sidebar(
+        bslib::accordion(
+          bslib::accordion_panel(
+            title = "Information",
+            icon = shiny::icon("info"),
+            shiny::p("")
+          ),
+          bslib::accordion_panel(
+            title = "grouping",
+            shiny::selectizeInput(
+              inputId = "summarise_missing_data_grouping_cdm_name",
+              label = "Cdm name",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_missing_data_grouping_omop_table",
+              label = "Omop table",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_missing_data_grouping_age_group",
+              label = "Age group",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_missing_data_grouping_sex",
+              label = "Sex",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_missing_data_grouping_year",
+              label = "Year",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            )
+          ),
+          bslib::accordion_panel(
+            title = "Variables",
+            shiny::selectizeInput(
+              inputId = "summarise_missing_data_variable_name",
+              label = "Variable name",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            )
+          ),
+          bslib::accordion_panel(
+            title = "Estimates",
+            shiny::selectizeInput(
+              inputId = "summarise_missing_data_estimate_name",
+              label = "Estimate name",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            )
+          )
+        )
+      ),
+      bslib::navset_card_tab(
+        bslib::nav_panel(
+          title = "Tidy",
+          bslib::card(
+            full_screen = TRUE,
+            bslib::card_header(
+              bslib::popover(
+                shiny::icon("download"),
+                shiny::downloadButton(outputId = "summarise_missing_data_tidy_download", label = "Download csv")
+              ),
+              class = "text-end"
+            ),
+            bslib::layout_sidebar(
+              sidebar = bslib::sidebar(
+                shiny::selectizeInput(
+                  inputId = "summarise_missing_data_tidy_columns",
+                  label = "Columns",
+                  choices = NULL,
+                  selected = NULL,
+                  multiple = TRUE,
+                  options = list(plugins = "remove_button")
+                ),
+                shiny::radioButtons(
+                  inputId = "summarise_missing_data_tidy_pivot",
+                  label = "Pivot estimates/variables",
+                  choices = c("none", "estimates", "estimates and variables"),
+                  selected = "none"
+                ),
+                position = "right"
+              ),
+              DT::dataTableOutput("summarise_missing_data_tidy")
+            )
+          )
+        ),
+        bslib::nav_panel(
+          title = "Formatted",
+          bslib::card(
+            full_screen = TRUE,
+            bslib::card_header(
+              bslib::popover(
+                shiny::icon("download"),
+                shiny::selectizeInput(
+                  inputId = "summarise_missing_data_gt_0_download_type",
+                  label = "File type",
+                  selected = "docx",
+                  choices = c("docx", "png", "pdf", "html"),
+                  multiple = FALSE
+                ),
+                shiny::downloadButton(outputId = "summarise_missing_data_gt_0_download", label = "Download")
+              ),
+              class = "text-end"
+            ),
+            bslib::layout_sidebar(
+              sidebar = bslib::sidebar(
+                sortable::bucket_list(
+                  header = NULL,
+                  sortable::add_rank_list(
+                    text = "none",
+                    labels = c("omop_table", "age_group", "sex", "year", "variable_name", "variable_level", "estimate_name"),
+                    input_id = "summarise_missing_data_gt_0_none"
+                  ),
+                  sortable::add_rank_list(
+                    text = "header",
+                    labels = "cdm_name",
+                    input_id = "summarise_missing_data_gt_0_header"
+                  ),
+                  sortable::add_rank_list(
+                    text = "group",
+                    labels = character(),
+                    input_id = "summarise_missing_data_gt_0_group"
+                  ),
+                  sortable::add_rank_list(
+                    text = "hide",
+                    labels = character(),
+                    input_id = "summarise_missing_data_gt_0_hide"
+                  )
+                ),
+                position = "right"
+              ),
+              gt::gt_output("summarise_missing_data_gt_0")
+            )
+          )
+        ),
+      # bslib::nav_panel(
+      #   title = "Summarise missing data table",
+      #   bslib::card(
+      #     full_screen = TRUE,
+      #     bslib::card_header(
+      #       bslib::popover(
+      #         shiny::icon("download"),
+      #         shiny::selectizeInput(
+      #           inputId = "summarise_missing_data_gt_22_download_type",
+      #           label = "File type",
+      #           selected = "docx",
+      #           choices = c("docx", "png", "pdf", "html"),
+      #           multiple = FALSE
+      #         ),
+      #         shiny::downloadButton(outputId = "summarise_missing_data_gt_22_download", label = "Download")
+      #       ),
+      #       class = "text-end"
+      #     ),
+      #     bslib::layout_sidebar(
+      #       sidebar = bslib::sidebar(,
+      #                                position = "right"
+      #       ),
+      #       gt::gt_output("summarise_missing_data_gt_22")
+      #     )
+      #   )
+      # )
+    )
+  )
+),
+  bslib::nav_panel(
+    title = "Summarise all concept counts",
+    icon = shiny::icon("clipboard-list"),
+    bslib::layout_sidebar(
+      sidebar = bslib::sidebar(
+        bslib::accordion(
+          bslib::accordion_panel(
+            title = "Information",
+            icon = shiny::icon("info"),
+            shiny::p("")
+          ),
+          bslib::accordion_panel(
+            title = "grouping",
+            shiny::selectizeInput(
+              inputId = "summarise_all_concept_counts_grouping_cdm_name",
+              label = "Cdm name",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_all_concept_counts_grouping_omop_table",
+              label = "Omop table",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_all_concept_counts_grouping_age_group",
+              label = "Age group",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_all_concept_counts_grouping_sex",
+              label = "Sex",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            ),
+            shiny::selectizeInput(
+              inputId = "summarise_all_concept_counts_grouping_year",
+              label = "Year",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            )
+          ),
+          bslib::accordion_panel(
+            title = "Variables",
+            shiny::selectizeInput(
+              inputId = "summarise_all_concept_counts_variable_name",
+              label = "Variable name",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            )
+          ),
+          bslib::accordion_panel(
+            title = "Estimates",
+            shiny::selectizeInput(
+              inputId = "summarise_all_concept_counts_estimate_name",
+              label = "Estimate name",
+              choices = NULL,
+              selected = NULL,
+              multiple = TRUE,
+              options = list(plugins = "remove_button")
+            )
+          )
+        )
+      ),
+      bslib::navset_card_tab(
+        bslib::nav_panel(
+          title = "Tidy",
+          bslib::card(
+            full_screen = TRUE,
+            bslib::card_header(
+              bslib::popover(
+                shiny::icon("download"),
+                shiny::downloadButton(outputId = "summarise_all_concept_counts_tidy_download", label = "Download csv")
+              ),
+              class = "text-end"
+            ),
+            bslib::layout_sidebar(
+              sidebar = bslib::sidebar(
+                shiny::selectizeInput(
+                  inputId = "summarise_all_concept_counts_tidy_columns",
+                  label = "Columns",
+                  choices = NULL,
+                  selected = NULL,
+                  multiple = TRUE,
+                  options = list(plugins = "remove_button")
+                ),
+                shiny::radioButtons(
+                  inputId = "summarise_all_concept_counts_tidy_pivot",
+                  label = "Pivot estimates/variables",
+                  choices = c("none", "estimates", "estimates and variables"),
+                  selected = "none"
+                ),
+                position = "right"
+              ),
+              DT::dataTableOutput("summarise_all_concept_counts_tidy")
+            )
+          )
+        ),
+        bslib::nav_panel(
+          title = "Formatted",
+          bslib::card(
+            full_screen = TRUE,
+            bslib::card_header(
+              bslib::popover(
+                shiny::icon("download"),
+                shiny::selectizeInput(
+                  inputId = "summarise_all_concept_counts_gt_0_download_type",
+                  label = "File type",
+                  selected = "docx",
+                  choices = c("docx", "png", "pdf", "html"),
+                  multiple = FALSE
+                ),
+                shiny::downloadButton(outputId = "summarise_all_concept_counts_gt_0_download", label = "Download")
+              ),
+              class = "text-end"
+            ),
+            bslib::layout_sidebar(
+              sidebar = bslib::sidebar(
+                sortable::bucket_list(
+                  header = NULL,
+                  sortable::add_rank_list(
+                    text = "none",
+                    labels = c("omop_table", "age_group", "sex", "year", "variable_name", "variable_level", "estimate_name"),
+                    input_id = "summarise_all_concept_counts_gt_0_none"
+                  ),
+                  sortable::add_rank_list(
+                    text = "header",
+                    labels = "cdm_name",
+                    input_id = "summarise_all_concept_counts_gt_0_header"
+                  ),
+                  sortable::add_rank_list(
+                    text = "group",
+                    labels = character(),
+                    input_id = "summarise_all_concept_counts_gt_0_group"
+                  ),
+                  sortable::add_rank_list(
+                    text = "hide",
+                    labels = character(),
+                    input_id = "summarise_all_concept_counts_gt_0_hide"
+                  )
+                ),
+                position = "right"
+              ),
+              gt::gt_output("summarise_all_concept_counts_gt_0")
+            )
+          )
+        ),
+        # bslib::nav_panel(
+        #   title = "Summarise all concepts counts table",
+        #   bslib::card(
+        #     full_screen = TRUE,
+        #     bslib::card_header(
+        #       bslib::popover(
+        #         shiny::icon("download"),
+        #         shiny::selectizeInput(
+        #           inputId = "summarise_all_concept_counts_gt_21_download_type",
+        #           label = "File type",
+        #           selected = "docx",
+        #           choices = c("docx", "png", "pdf", "html"),
+        #           multiple = FALSE
+        #         ),
+        #         shiny::downloadButton(outputId = "summarise_all_concept_counts_gt_21_download", label = "Download")
+        #       ),
+        #       class = "text-end"
+        #     ),
+        #     bslib::layout_sidebar(
+        #       sidebar = bslib::sidebar(,
+        #                                position = "right"
+        #       ),
+        #       gt::gt_output("summarise_all_concept_counts_gt_21")
+        #     )
+        #   )
+        # )
+      )
+    )
+  ),
+  bslib::nav_panel(
     title = "Summarise clinical records",
     icon = shiny::icon("clipboard-list"),
     bslib::layout_sidebar(

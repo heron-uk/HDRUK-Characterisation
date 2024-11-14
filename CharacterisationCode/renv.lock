@@ -68,15 +68,16 @@
     },
     "CohortConstructor": {
       "Package": "CohortConstructor",
-      "Version": "0.3.1",
+      "Version": "0.3.2",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "CDMConnector",
         "PatientProfiles",
         "R",
         "checkmate",
         "cli",
+        "clock",
         "dbplyr",
         "dplyr",
         "glue",
@@ -87,7 +88,7 @@
         "tidyr",
         "utils"
       ],
-      "Hash": "3f547bc8dd155753022653e0108351fd"
+      "Hash": "4829dc9e17a7ebda874d6d64e8cb32aa"
     },
     "DBI": {
       "Package": "DBI",
@@ -140,7 +141,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "OmopSketch",
       "RemoteUsername": "OHDSI",
-      "RemoteSha": "b5c04d5883d45a472a7a1548221398307ba3a029",
+      "RemoteSha": "e5d68a1752d0b98f5f7216f2de480cc6185609e0",
       "Requirements": [
         "CDMConnector",
         "CohortConstructor",
@@ -158,7 +159,7 @@
         "tidyr",
         "visOmopResults"
       ],
-      "Hash": "cf58bb498b434d573358d1f70b6eac44"
+      "Hash": "dcd5cf2617167ff781262abe38d5727c"
     },
     "PatientProfiles": {
       "Package": "PatientProfiles",
@@ -432,14 +433,14 @@
     },
     "fs": {
       "Package": "fs",
-      "Version": "1.6.4",
+      "Version": "1.6.5",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "15aeb8c27f5ea5161f9f6a641fafd93a"
+      "Hash": "7f48af39fa27711ea5fbd183b399920d"
     },
     "generics": {
       "Package": "generics",
@@ -490,18 +491,19 @@
     },
     "gtable": {
       "Package": "gtable",
-      "Version": "0.3.5",
+      "Version": "0.3.6",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "cli",
         "glue",
         "grid",
         "lifecycle",
-        "rlang"
+        "rlang",
+        "stats"
       ],
-      "Hash": "e18861963cbc65a27736e02b3cd3c4a0"
+      "Hash": "de949855009e2d4d0e52a844e30617ae"
     },
     "here": {
       "Package": "here",
@@ -647,7 +649,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "omopgenerics",
       "RemoteUsername": "darwin-eu-dev",
-      "RemoteSha": "3a0198dc67b1d867f3dd1e102d7b1e4423a75832",
+      "RemoteSha": "74495b0cae1c3222d840116f7b144687c1f34766",
       "Requirements": [
         "R",
         "cli",
@@ -663,7 +665,7 @@
         "tidyr",
         "vctrs"
       ],
-      "Hash": "4ee9efe97073740bc75285367b3e78d0"
+      "Hash": "7b4845e34a811c216d9bc4c308479a8d"
     },
     "pillar": {
       "Package": "pillar",
@@ -753,16 +755,6 @@
         "vroom"
       ],
       "Hash": "9de96463d2117f6ac49980577939dfb3"
-    },
-    "rematch2": {
-      "Package": "rematch2",
-      "Version": "2.1.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "tibble"
-      ],
-      "Hash": "76c9e04c712a05848ae7a23d2f170a40"
     },
     "renv": {
       "Package": "renv",
@@ -1007,32 +999,30 @@
     },
     "waldo": {
       "Package": "waldo",
-      "Version": "0.5.3",
+      "Version": "0.6.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "cli",
         "diffobj",
         "glue",
         "methods",
-        "rematch2",
-        "rlang",
-        "tibble"
+        "rlang"
       ],
-      "Hash": "16aa934a49658677d8041df9017329b9"
+      "Hash": "52f574062a7b66e56926988c3fbdb3b7"
     },
     "withr": {
       "Package": "withr",
-      "Version": "3.0.1",
+      "Version": "3.0.2",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "grDevices",
         "graphics"
       ],
-      "Hash": "07909200e8bbe90426fbfeb73e1e27aa"
+      "Hash": "cc2d62c76458d425210d1eb1478b30b4"
     },
     "zip": {
       "Package": "zip",

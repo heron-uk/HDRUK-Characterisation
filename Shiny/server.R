@@ -178,6 +178,176 @@ server <- function(input, output, session) {
       )
     }
   )
+  # summarise_missing_data -----
+  ## tidy summarise_missing_data -----
+  getTidyDataSummariseMissingData <- shiny::reactive({
+    res <- data |>
+      OmopViewer::filterData("summarise_missing_data", input) |>
+      OmopViewer::tidyData()
+    
+    # columns to eliminate
+    colsEliminate <- colnames(res)
+    colsEliminate <- colsEliminate[!colsEliminate %in% c(
+      input$summarise_missing_data_tidy_columns, "variable_name", "variable_level",
+      "estimate_name", "estimate_type", "estimate_value"
+    )]
+    
+    # pivot
+    pivot <- input$summarise_missing_data_tidy_pivot
+    if (pivot != "none") {
+      vars <- switch(pivot,
+                     "estimates" = "estimate_name",
+                     "estimates and variables" = c("variable_name", "variable_level", "estimate_name")
+      )
+      res <- res |>
+        visOmopResults::pivotEstimates(pivotEstimatesBy = vars)
+    }
+    
+    res |>
+      dplyr::select(!dplyr::all_of(colsEliminate))
+  })
+  output$summarise_missing_data_tidy <- DT::renderDT({
+    DT::datatable(
+      getTidyDataSummariseMissingData(),
+      options = list(scrollX = TRUE),
+      rownames = FALSE
+    )
+  })
+  output$summarise_missing_data_tidy_download <- shiny::downloadHandler(
+    filename = "tidy_summarise_missing_data.csv",
+    content = function(file) {
+      getTidyDataSummariseMissingData() |>
+        readr::write_csv(file = file)
+    }
+  )
+  ## output summarise_missing_data -----
+  ## output 0 -----
+  createOutput0 <- shiny::reactive({
+    result <- data |>
+      OmopViewer::filterData("summarise_missing_data", input)
+    OmopViewer::omopViewerTable(
+      result,
+      header = input$summarise_missing_data_gt_0_header,
+      group = input$summarise_missing_data_gt_0_group,
+      hide = input$summarise_missing_data_gt_0_hide
+    )
+  })
+  output$summarise_missing_data_gt_0 <- gt::render_gt({
+    createOutput0()
+  })
+  output$summarise_missing_data_gt_0_download <- shiny::downloadHandler(
+    filename = paste0("output_gt_summarise_missing_data.", input$summarise_missing_data_gt_0_download_type),
+    content = function(file) {
+      obj <- createOutput0()
+      gt::gtsave(data = obj, filename = file)
+    }
+  )
+  
+  # createOutput22 <- shiny::reactive({
+  #   result <- data |>
+  #     OmopViewer::filterData("summarise_missing_data", input)
+  #   OmopSketch::tableMissingData(
+  #     result
+  #   )
+  # })
+  # output$summarise_missing_data_gt_22 <- gt::render_gt({
+  #   createOutput22()
+  # })
+  # output$summarise_missing_data_gt_22_download <- shiny::downloadHandler(
+  #   filename = paste0("output_gt_summarise_missing_data.", input$summarise_missing_data_gt_22_download_type),
+  #   content = function(file) {
+  #     obj <- createOutput22()
+  #     gt::gtsave(data = obj, filename = file)
+  #   }
+  # )
+  # 
+  
+  # summarise_all_concept_counts -----
+  ## tidy summarise_all_concept_counts -----
+  getTidyDataSummariseAllConceptCounts <- shiny::reactive({
+    res <- data |>
+      OmopViewer::filterData("summarise_all_concept_counts", input) |>
+      OmopViewer::tidyData()
+    
+    # columns to eliminate
+    colsEliminate <- colnames(res)
+    colsEliminate <- colsEliminate[!colsEliminate %in% c(
+      input$summarise_all_concept_counts_tidy_columns, "variable_name", "variable_level",
+      "estimate_name", "estimate_type", "estimate_value"
+    )]
+    
+    # pivot
+    pivot <- input$summarise_all_concept_counts_tidy_pivot
+    if (pivot != "none") {
+      vars <- switch(pivot,
+                     "estimates" = "estimate_name",
+                     "estimates and variables" = c("variable_name", "variable_level", "estimate_name")
+      )
+      res <- res |>
+        visOmopResults::pivotEstimates(pivotEstimatesBy = vars)
+    }
+    
+    res |>
+      dplyr::select(!dplyr::all_of(colsEliminate))
+  })
+  output$summarise_all_concept_counts_tidy <- DT::renderDT({
+    DT::datatable(
+      getTidyDataSummariseAllConceptCounts(),
+      options = list(scrollX = TRUE),
+      rownames = FALSE
+    )
+  })
+  output$summarise_all_concept_counts_tidy_download <- shiny::downloadHandler(
+    filename = "tidy_summarise_all_concept_counts.csv",
+    content = function(file) {
+      getTidyDataSummariseAllConceptCounts() |>
+        readr::write_csv(file = file)
+    }
+  )
+  ## output summarise_all_concept_counts -----
+  ## output 0 -----
+  createOutput0 <- shiny::reactive({
+    result <- data |>
+      OmopViewer::filterData("summarise_all_concept_counts", input)
+    OmopViewer::omopViewerTable(
+      result,
+      header = input$summarise_all_concept_counts_gt_0_header,
+      group = input$summarise_all_concept_counts_gt_0_group,
+      hide = input$summarise_all_concept_counts_gt_0_hide
+    )
+  })
+  output$summarise_all_concept_counts_gt_0 <- gt::render_gt({
+    createOutput0()
+  })
+  output$summarise_all_concept_counts_gt_0_download <- shiny::downloadHandler(
+    filename = paste0("output_gt_summarise_all_concept_counts.", input$summarise_all_concept_counts_gt_0_download_type),
+    content = function(file) {
+      obj <- createOutput0()
+      gt::gtsave(data = obj, filename = file)
+    }
+  )
+  
+  
+# 
+#   createOutput21 <- shiny::reactive({
+#     result <- data |>
+#       OmopViewer::filterData("summarise_all_concept_counts", input)
+#     OmopSketch::tableAllConceptCounts(
+#       result
+#     )
+#   })
+#   output$summarise_all_concept_counts_gt_21 <- gt::render_gt({
+#     createOutput21()
+#   })
+#   output$summarise_all_concept_counts_gt_21_download <- shiny::downloadHandler(
+#     filename = paste0("output_gt_summarise_all_concept_counts.", input$summarise_all_concept_counts_gt_21_download_type),
+#     content = function(file) {
+#       obj <- createOutput21()
+#       gt::gtsave(data = obj, filename = file)
+#     }
+#   )
+#   
+#   
   
   ###### summarised clinical records
 
