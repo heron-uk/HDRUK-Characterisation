@@ -14,7 +14,7 @@ tableName <- c("observation_period", "visit_occurrence", "condition_occurrence",
 sex <- TRUE # FALSE
 ageGroup <- list(c(0,19), c(20, 39),c(40, 59), c(60, 79), c(80, Inf) ) # NULL
 ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
-
+dateRange <- as.Date(c("2012-01-01", NA))
 # Snapshot
 log_message("Getting cdm snapshot")
 snapshot <- OmopSketch::summariseOmopSnapshot(cdm) 
@@ -23,29 +23,41 @@ snapshot <- OmopSketch::summariseOmopSnapshot(cdm)
 log_message("Getting population characteristics")
 result_populationCharacteristics <- CohortConstructor::demographicsCohort(cdm, "population", ageRange = ageGroup, sex = "Both" ) |>
   PatientProfiles::addDemographicsQuery(sex = TRUE, age = FALSE, ageGroup = ageGroup) |>
-  CohortConstructor::requireInDateRange(dateRange = as.Date(c("2012-01-01", "2025-01-01")))|>
+  CohortConstructor::requireInDateRange(dateRange = dateRange)|>
   CohortCharacteristics::summariseCharacteristics(strata = list("sex", "age_group") )
 
 log_message("Summarising missing data")
-result_missingData <- OmopSketch::summariseMissingData(cdm , omopTableName = tableName, sex = sex, ageGroup = ageGroup, year = TRUE )
+result_missingData <- OmopSketch::summariseMissingData(cdm ,
+                                                       omopTableName = tableName, 
+                                                       sex = sex, 
+                                                       ageGroup = ageGroup, 
+                                                       year = TRUE, 
+                                                       dateRange = dateRange)
 
 log_message("Summarising all concept counts")
-result_allConceptCount <- OmopSketch::summariseAllConceptCounts(cdm, omopTableName = tableName, sex = sex, ageGroup = ageGroup, year = TRUE)
+result_allConceptCount <- OmopSketch::summariseAllConceptCounts(cdm, 
+                                                                omopTableName = tableName, 
+                                                                sex = sex, 
+                                                                ageGroup = ageGroup, 
+                                                                year = TRUE, 
+                                                                dateRange = dateRange)
 
 # Summarize clinical records
 log_message("Summarising clinical records")
 result_clinicalRecords<- OmopSketch::summariseClinicalRecords(cdm, 
                                                   omopTableName = tableName, 
                                                   sex = sex, 
-                                                  ageGroup = ageGroup) 
+                                                  ageGroup = ageGroup,
+                                                  dateRange = dateRange) 
 
 # Summarize record counts
 log_message("Summarising record counts")
 result_recordCounts <- OmopSketch::summariseRecordCount(cdm,  tableName,
-                                                   sex = sex, 
+                                                   sex = sex,
                                                    ageGroup = ageGroup,
-                                                   interval = "years") 
-  
+                                                   interval = "years",
+                                                   dateRange = dateRange)
+
 
 
 
@@ -53,8 +65,10 @@ result_recordCounts <- OmopSketch::summariseRecordCount(cdm,  tableName,
 log_message("Summarising in observation records and person-days")
 result_inObservation <- OmopSketch::summariseInObservation(cdm$observation_period, 
                                                            output = c("records","person-days"), 
+                                                           interval = "years",
                                                            sex = sex,
-                                                           ageGroup = ageGroup) 
+                                                           ageGroup = ageGroup,
+                                                           dateRange = dateRange) 
 
 
 
@@ -63,8 +77,8 @@ result_inObservation <- OmopSketch::summariseInObservation(cdm$observation_perio
 log_message("Summarising observation period")
 result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observation_period, 
                                                                    sex = sex, 
-                                                                   ageGroup = ageGroup
-)
+                                                                   ageGroup = ageGroup, 
+                                                                   dateRange = dateRange)
 
 # Combine results and export
 result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_missingData, result_allConceptCount, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod)

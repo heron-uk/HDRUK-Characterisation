@@ -52,6 +52,9 @@ rsconnect/
 
 # Results
 CharacterisationCode/Results/*.csv
+CharacterisationCode/Results/*.zip
+CharacterisationCode/Results/*.txt
+
 
 # Ignore Mac DS_Store files
 .DS_Store
