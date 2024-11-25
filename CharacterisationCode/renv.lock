@@ -11,9 +11,9 @@
   "Packages": {
     "CDMConnector": {
       "Package": "CDMConnector",
-      "Version": "1.5.0",
+      "Version": "1.6.0",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "DBI",
         "R",
@@ -38,7 +38,7 @@
         "waldo",
         "withr"
       ],
-      "Hash": "2bae94aed83da2007c938f3d2fa1a48f"
+      "Hash": "8ff5a724d7a75d782a2570b0a53c5150"
     },
     "CohortCharacteristics": {
       "Package": "CohortCharacteristics",
@@ -141,7 +141,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "OmopSketch",
       "RemoteUsername": "OHDSI",
-      "RemoteSha": "e5d68a1752d0b98f5f7216f2de480cc6185609e0",
+      "RemoteSha": "ca04b0cb4663ea0139b0f23bf02c7237976a005e",
       "Requirements": [
         "CDMConnector",
         "CohortConstructor",
@@ -159,7 +159,7 @@
         "tidyr",
         "visOmopResults"
       ],
-      "Hash": "dcd5cf2617167ff781262abe38d5727c"
+      "Hash": "8a062c331abf3506ed175414593a8fb4"
     },
     "PatientProfiles": {
       "Package": "PatientProfiles",
@@ -643,18 +643,19 @@
     },
     "omopgenerics": {
       "Package": "omopgenerics",
-      "Version": "0.3.1.900",
+      "Version": "0.4.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "omopgenerics",
-      "RemoteUsername": "darwin-eu-dev",
-      "RemoteSha": "74495b0cae1c3222d840116f7b144687c1f34766",
+      "RemoteUsername": "darwin-eu",
+      "RemoteSha": "3778bbd2cd5510a817dbac411b10af401fd25965",
       "Requirements": [
         "R",
         "cli",
         "dbplyr",
         "dplyr",
+        "generics",
         "glue",
         "lifecycle",
         "methods",
@@ -665,7 +666,7 @@
         "tidyr",
         "vctrs"
       ],
-      "Hash": "7b4845e34a811c216d9bc4c308479a8d"
+      "Hash": "28e55bb219ef063055c3775a57ad60a0"
     },
     "pillar": {
       "Package": "pillar",
