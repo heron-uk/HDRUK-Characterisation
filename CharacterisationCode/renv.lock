@@ -43,12 +43,8 @@
     "CohortCharacteristics": {
       "Package": "CohortCharacteristics",
       "Version": "0.3.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "CohortCharacteristics",
-      "RemoteUsername": "darwin-eu-dev",
-      "RemoteSha": "4d1660e8a3dd3eb21b8d88913af024f55ab47ec6",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "CDMConnector",
         "PatientProfiles",
@@ -64,7 +60,7 @@
         "tidyr",
         "visOmopResults"
       ],
-      "Hash": "ee9cf8b4392b00411ec021dd642cfebf"
+      "Hash": "8de8f791d0442c9f457c4ef0d3840832"
     },
     "CohortConstructor": {
       "Package": "CohortConstructor",
