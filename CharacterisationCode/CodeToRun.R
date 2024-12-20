@@ -1,6 +1,6 @@
 
-
-db_name <- "..."
+renv::restore()
+dbName <- "..."
 
 con <- DBI::dbConnect("...")
 
@@ -15,7 +15,7 @@ cdm <- CDMConnector::cdmFromCon(con = con,
                                 writeSchema = c(schema = writeSchema,
                                                 prefix = prefix))
 
-
+minCellCount = 5
 
 
 source("RunCharacterisation.R")
