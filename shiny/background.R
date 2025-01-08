@@ -1,8 +1,15 @@
+db_names <- unique(data[[1]]$cdm_name) 
+
+
+db_list <- paste0("- ", db_names, collapse = "\n")
+
+
+background_md <- glue::glue("
 # Characterisation
 
 This Shiny app presents the results of analyses conducted on the following databases:
 
-- An OMOP CDM database
+{db_list}
 
 The analyses include:
 
@@ -23,4 +30,6 @@ The analyses include:
 - Distribution of records per person for each ordinal observation period.
 
 
-![](hdruk_logo.svg)100px
+![](hdruk_logo.svg){width='100px'}
+")
+writeLines(background_md, "background.md")
