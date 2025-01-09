@@ -99,7 +99,7 @@ dur <- abs(as.numeric(Sys.time() - start_time, units = "secs"))
 log_message(paste("Study code finished. Code ran in", floor(dur / 60), "min and", dur %% 60 %/% 1, "sec"))
 
 # Close connection
-cdm_disconnect(cdm)
+CDMConnector::cdmDisconnect(cdm)
 log_message("Database connection closed")
 
 # Zip the results
