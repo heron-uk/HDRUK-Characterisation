@@ -7,7 +7,7 @@ logfile <- file.path( paste0(outputFolder,
 ))
 
 log_message <- function(message) {
-  cat(paste(Sys.time(), "-", message, "\n"), file = log_file, append = TRUE)
+  cat(paste(Sys.time(), "-", message, "\n"), file = logfile, append = TRUE)
   cli::cli_inform(paste(Sys.time(), "-", message, "\n"))
 }
 
