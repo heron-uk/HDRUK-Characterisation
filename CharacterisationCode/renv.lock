@@ -11,7 +11,7 @@
   "Packages": {
     "CDMConnector": {
       "Package": "CDMConnector",
-      "Version": "1.6.1",
+      "Version": "1.7.0",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -21,7 +21,6 @@
         "cli",
         "dbplyr",
         "dplyr",
-        "fs",
         "generics",
         "glue",
         "jsonlite",
@@ -35,10 +34,9 @@
         "stringr",
         "tidyr",
         "tidyselect",
-        "waldo",
         "withr"
       ],
-      "Hash": "1b6e550b3f742dab03099f3768595b98"
+      "Hash": "5233515358b0c45cd01e0d19573f0709"
     },
     "CohortCharacteristics": {
       "Package": "CohortCharacteristics",
@@ -99,13 +97,9 @@
     },
     "OmopSketch": {
       "Package": "OmopSketch",
-      "Version": "0.1.1",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "OmopSketch",
-      "RemoteUsername": "OHDSI",
-      "RemoteSha": "24bcfb26100b03f55579ac973a3d8ca6a1bbe1c5",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "CDMConnector",
         "CohortConstructor",
@@ -114,19 +108,20 @@
         "cli",
         "clock",
         "dplyr",
+        "glue",
+        "lifecycle",
         "omopgenerics",
         "purrr",
         "rlang",
         "stringr",
         "tibble",
-        "tidyr",
-        "visOmopResults"
+        "tidyr"
       ],
-      "Hash": "e26a42bbb901e8d9d3e972df3b9dddda"
+      "Hash": "0c37ddc951ee1dafd9ef3ef7998db507"
     },
     "PatientProfiles": {
       "Package": "PatientProfiles",
-      "Version": "1.2.2",
+      "Version": "1.2.3",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -141,7 +136,7 @@
         "stringr",
         "tidyr"
       ],
-      "Hash": "87b3c5ddb1c4bc1f464115f610325c0e"
+      "Hash": "4f2cb7324f2d1d4f04a4aeb52fc6a200"
     },
     "R6": {
       "Package": "R6",
@@ -165,13 +160,13 @@
     },
     "bit": {
       "Package": "bit",
-      "Version": "4.5.0",
+      "Version": "4.5.0.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
-      "Hash": "5dc7b2677d65d0e874fc4aaf0e879987"
+      "Hash": "f89f074e0e49bf1dbe3eba0a15a91476"
     },
     "bit64": {
       "Package": "bit64",
@@ -250,13 +245,13 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.5.0",
+      "Version": "0.5.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
-      "Hash": "91570bba75d0c9d3f1040c835cee8fba"
+      "Hash": "9df43854f1c84685d095ed6270b52387"
     },
     "crayon": {
       "Package": "crayon",
@@ -297,21 +292,6 @@
         "withr"
       ],
       "Hash": "39b2e002522bfd258039ee4e889e0fd1"
-    },
-    "diffobj": {
-      "Package": "diffobj",
-      "Version": "0.3.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "crayon",
-        "methods",
-        "stats",
-        "tools",
-        "utils"
-      ],
-      "Hash": "bcaa8b95f8d7d01a5dedfd959ce88ab8"
     },
     "dplyr": {
       "Package": "dplyr",
@@ -360,17 +340,6 @@
         "utils"
       ],
       "Hash": "962174cf2aeb5b9eea581522286a911f"
-    },
-    "fs": {
-      "Package": "fs",
-      "Version": "1.6.5",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "R",
-        "methods"
-      ],
-      "Hash": "7f48af39fa27711ea5fbd183b399920d"
     },
     "generics": {
       "Package": "generics",
@@ -453,13 +422,9 @@
     },
     "omopgenerics": {
       "Package": "omopgenerics",
-      "Version": "0.4.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "omopgenerics",
-      "RemoteUsername": "darwin-eu",
-      "RemoteSha": "3778bbd2cd5510a817dbac411b10af401fd25965",
+      "Version": "0.4.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "cli",
@@ -476,16 +441,15 @@
         "tidyr",
         "vctrs"
       ],
-      "Hash": "28e55bb219ef063055c3775a57ad60a0"
+      "Hash": "072f4e363174ababd20aeab7926d5797"
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.9.0",
+      "Version": "1.10.0",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "cli",
-        "fansi",
         "glue",
         "lifecycle",
         "rlang",
@@ -493,7 +457,7 @@
         "utils",
         "vctrs"
       ],
-      "Hash": "15da5a8412f317beeee6175fbc76f4bb"
+      "Hash": "101ca350beea21261a15ba169d7a8513"
     },
     "pkgconfig": {
       "Package": "pkgconfig",
@@ -777,21 +741,6 @@
         "withr"
       ],
       "Hash": "390f9315bc0025be03012054103d227c"
-    },
-    "waldo": {
-      "Package": "waldo",
-      "Version": "0.6.1",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "R",
-        "cli",
-        "diffobj",
-        "glue",
-        "methods",
-        "rlang"
-      ],
-      "Hash": "52f574062a7b66e56926988c3fbdb3b7"
     },
     "withr": {
       "Package": "withr",

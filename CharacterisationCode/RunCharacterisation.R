@@ -16,9 +16,10 @@ log_message("Start time recorded.")
 tableName <- c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence", 
                "device_exposure", "measurement" , "observation", "death")
 sex <- TRUE # FALSE
-ageGroup <- list(c(0,19), c(20, 39),c(40, 59), c(60, 79), c(80, Inf) ) # NULL
+ageGroup <- list(c(0,19), c(20, 39),c(40, 59), c(60, 79), c(80, Inf) ) 
 ageGroup <- omopgenerics::validateAgeGroupArgument(ageGroup, ageGroupName = "")[[1]]
 dateRange <- as.Date(c("2012-01-01", NA))
+
 # Snapshot
 log_message("Getting cdm snapshot")
 snapshot <- OmopSketch::summariseOmopSnapshot(cdm) 
@@ -30,6 +31,7 @@ result_populationCharacteristics <- CohortConstructor::demographicsCohort(cdm, "
   CohortConstructor::requireInDateRange(dateRange = dateRange)|>
   CohortCharacteristics::summariseCharacteristics(strata = list("sex", "age_group") )
 
+# Summarise missing data
 log_message("Summarising missing data")
 result_missingData <- OmopSketch::summariseMissingData(cdm ,
                                                        omopTableName = tableName, 
@@ -38,15 +40,16 @@ result_missingData <- OmopSketch::summariseMissingData(cdm ,
                                                        year = TRUE, 
                                                        dateRange = dateRange)
 
-log_message("Summarising all concept counts")
-result_allConceptCount <- OmopSketch::summariseAllConceptCounts(cdm, 
-                                                                omopTableName = tableName, 
-                                                                sex = sex, 
-                                                                ageGroup = ageGroup, 
-                                                                year = TRUE, 
-                                                                dateRange = dateRange)
+# Summarise concept counts
+log_message("Summarising concept id counts")
+result_conceptIdCount <- OmopSketch::summariseConceptIdCounts(cdm, 
+                                                              omopTableName = tableName, 
+                                                              sex = sex, 
+                                                              ageGroup = ageGroup, 
+                                                              year = TRUE, 
+                                                              dateRange = dateRange)
 
-# Summarize clinical records
+# Summarise clinical records
 log_message("Summarising clinical records")
 result_clinicalRecords<- OmopSketch::summariseClinicalRecords(cdm, 
                                                   omopTableName = tableName, 
@@ -77,7 +80,7 @@ result_inObservation <- OmopSketch::summariseInObservation(cdm$observation_perio
 
 
 
-# Summarize observation period
+# Summarise observation period
 log_message("Summarising observation period")
 result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observation_period, 
                                                                    sex = sex, 
@@ -85,7 +88,7 @@ result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observati
                                                                    dateRange = dateRange)
 
 # Combine results and export
-result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_missingData, result_allConceptCount, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod)
+result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_missingData, result_conceptIdCount, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod)
 omopgenerics::exportSummarisedResult(result, minCellCount = minCellCount, path = outputFolder, fileName = paste0(
   "result_characterisation_", dbName, ".csv"))
 
