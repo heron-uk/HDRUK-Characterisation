@@ -47,7 +47,7 @@
       "RemoteRepo": "CohortCharacteristics",
       "RemoteUsername": "darwin-eu",
       "RemoteRef": "issue_266_dev",
-      "RemoteSha": "8b45acd6f047ef36d0c1379bdead447175ee68e5",
+      "RemoteSha": "0d5e78ded054eb6afea20c630fdeabe524181736",
       "Requirements": [
         "CDMConnector",
         "PatientProfiles",
@@ -63,7 +63,7 @@
         "tidyr",
         "visOmopResults"
       ],
-      "Hash": "6f9893818344830b9074ccacaaf9f6c2"
+      "Hash": "868b0eaaa38d57a130e15e8d891e4caa"
     },
     "CohortConstructor": {
       "Package": "CohortConstructor",
