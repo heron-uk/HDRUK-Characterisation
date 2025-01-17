@@ -102,7 +102,7 @@
     },
     "OmopSketch": {
       "Package": "OmopSketch",
-      "Version": "0.2.0",
+      "Version": "0.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -122,7 +122,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "0c37ddc951ee1dafd9ef3ef7998db507"
+      "Hash": "1267f40708ddba6cd56b623d5c386ad3"
     },
     "PatientProfiles": {
       "Package": "PatientProfiles",
@@ -441,9 +441,9 @@
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.10.0",
+      "Version": "1.10.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "cli",
         "glue",
@@ -453,7 +453,7 @@
         "utils",
         "vctrs"
       ],
-      "Hash": "101ca350beea21261a15ba169d7a8513"
+      "Hash": "8b16b6097daef84cd3c40a6a7c5c9d86"
     },
     "pkgconfig": {
       "Package": "pkgconfig",
@@ -695,22 +695,21 @@
     },
     "visOmopResults": {
       "Package": "visOmopResults",
-      "Version": "0.5.1",
+      "Version": "1.0.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "cli",
         "dplyr",
         "generics",
         "glue",
-        "lifecycle",
         "omopgenerics",
         "purrr",
         "rlang",
         "stringr",
         "tidyr"
       ],
-      "Hash": "62111b2c7b941ffe31fc68fbe1cae436"
+      "Hash": "4a6d832d0cf4775f7a3f865982b92231"
     },
     "vroom": {
       "Package": "vroom",
