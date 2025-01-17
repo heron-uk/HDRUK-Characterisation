@@ -554,18 +554,18 @@ ui <- bslib::page_navbar(
           bslib::accordion_panel(
             title = "Settings",
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_settings_study_period_end",
+              inputId = "summarise_concept_id_counts_settings_study_period_end",
               label = "Study period end",
-              choices = filterValues$summarise_all_concept_counts_settings_study_period_end,
-              selected = filterValues$summarise_all_concept_counts_settings_study_period_end,
+              choices = filterValues$summarise_concept_id_counts_settings_study_period_end,
+              selected = filterValues$summarise_concept_id_counts_settings_study_period_end,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_settings_study_period_start",
+              inputId = "summarise_concept_id_counts_settings_study_period_start",
               label = "Study period start",
-              choices = filterValues$summarise_all_concept_counts_settings_study_period_start,
-              selected = filterValues$summarise_all_concept_counts_settings_study_period_start,
+              choices = filterValues$summarise_concept_id_counts_settings_study_period_start,
+              selected = filterValues$summarise_concept_id_counts_settings_study_period_start,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             )
@@ -573,42 +573,42 @@ ui <- bslib::page_navbar(
           bslib::accordion_panel(
             title = "Grouping",
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_grouping_cdm_name",
+              inputId = "summarise_concept_id_counts_grouping_cdm_name",
               label = "Cdm name",
-              choices = filterValues$summarise_all_concept_counts_grouping_cdm_name,
-              selected = filterValues$summarise_all_concept_counts_grouping_cdm_name,
+              choices = filterValues$summarise_concept_id_counts_grouping_cdm_name,
+              selected = filterValues$summarise_concept_id_counts_grouping_cdm_name,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_grouping_omop_table",
+              inputId = "summarise_concept_id_counts_grouping_omop_table",
               label = "Omop table",
-              choices = filterValues$summarise_all_concept_counts_grouping_omop_table,
-              selected = filterValues$summarise_all_concept_counts_grouping_omop_table,
+              choices = filterValues$summarise_concept_id_counts_grouping_omop_table,
+              selected = filterValues$summarise_concept_id_counts_grouping_omop_table,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_grouping_age_group",
+              inputId = "summarise_concept_id_counts_grouping_age_group",
               label = "Age group",
-              choices = filterValues$summarise_all_concept_counts_grouping_age_group,
-              selected = filterValues$summarise_all_concept_counts_grouping_age_group,
+              choices = filterValues$summarise_concept_id_counts_grouping_age_group,
+              selected = filterValues$summarise_concept_id_counts_grouping_age_group,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_grouping_sex",
+              inputId = "summarise_concept_id_counts_grouping_sex",
               label = "Sex",
-              choices = filterValues$summarise_all_concept_counts_grouping_sex,
-              selected = filterValues$summarise_all_concept_counts_grouping_sex,
+              choices = filterValues$summarise_concept_id_counts_grouping_sex,
+              selected = filterValues$summarise_concept_id_counts_grouping_sex,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_grouping_year",
+              inputId = "summarise_concept_id_counts_grouping_year",
               label = "Year",
-              choices = filterValues$summarise_all_concept_counts_grouping_year,
-              selected = filterValues$summarise_all_concept_counts_grouping_year,
+              choices = filterValues$summarise_concept_id_counts_grouping_year,
+              selected = filterValues$summarise_concept_id_counts_grouping_year,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             )
@@ -616,10 +616,10 @@ ui <- bslib::page_navbar(
           bslib::accordion_panel(
             title = "Variables",
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_variable_name",
+              inputId = "summarise_concept_id_counts_variable_name",
               label = "Variable name",
-              choices = filterValues$summarise_all_concept_counts_variable_name,
-              selected = filterValues$summarise_all_concept_counts_variable_name,
+              choices = filterValues$summarise_concept_id_counts_variable_name,
+              selected = filterValues$summarise_concept_id_counts_variable_name,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             )
@@ -627,10 +627,10 @@ ui <- bslib::page_navbar(
           bslib::accordion_panel(
             title = "Estimates",
             shinyWidgets::pickerInput(
-              inputId = "summarise_all_concept_counts_estimate_name",
+              inputId = "summarise_concept_id_counts_estimate_name",
               label = "Estimate name",
-              choices = filterValues$summarise_all_concept_counts_estimate_name,
-              selected = filterValues$summarise_all_concept_counts_estimate_name,
+              choices = filterValues$summarise_concept_id_counts_estimate_name,
+              selected = filterValues$summarise_concept_id_counts_estimate_name,
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             )
@@ -645,29 +645,29 @@ ui <- bslib::page_navbar(
             bslib::card_header(
               bslib::popover(
                 shiny::icon("download"),
-                shiny::downloadButton(outputId = "summarise_all_concept_counts_tidy_download", label = "Download csv")
+                shiny::downloadButton(outputId = "summarise_concept_id_counts_tidy_download", label = "Download csv")
               ),
               class = "text-end"
             ),
             bslib::layout_sidebar(
               sidebar = bslib::sidebar(
                 shinyWidgets::pickerInput(
-                  inputId = "summarise_all_concept_counts_tidy_columns",
+                  inputId = "summarise_concept_id_counts_tidy_columns",
                   label = "Columns",
-                  choices = filterValues$summarise_all_concept_counts_tidy_columns,
-                  selected = filterValues$summarise_all_concept_counts_tidy_columns,
+                  choices = filterValues$summarise_concept_id_counts_tidy_columns,
+                  selected = filterValues$summarise_concept_id_counts_tidy_columns,
                   multiple = TRUE,
                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                 ),
                 shiny::radioButtons(
-                  inputId = "summarise_all_concept_counts_tidy_pivot",
+                  inputId = "summarise_concept_id_counts_tidy_pivot",
                   label = "Pivot estimates/variables",
                   choices = c("none", "estimates", "estimates and variables"),
                   selected = "none"
                 ),
                 position = "right"
               ),
-              DT::dataTableOutput("summarise_all_concept_counts_tidy")
+              DT::dataTableOutput("summarise_concept_id_counts_tidy")
             )
           )
         ),
@@ -679,13 +679,13 @@ ui <- bslib::page_navbar(
               bslib::popover(
                 shiny::icon("download"),
                 shinyWidgets::pickerInput(
-                  inputId = "summarise_all_concept_counts_gt_0_download_type",
+                  inputId = "summarise_concept_id_counts_gt_0_download_type",
                   label = "File type",
                   selected = "docx",
                   choices = c("docx", "png", "pdf", "html"),
                   multiple = FALSE
                 ),
-                shiny::downloadButton(outputId = "summarise_all_concept_counts_gt_0_download", label = "Download")
+                shiny::downloadButton(outputId = "summarise_concept_id_counts_gt_0_download", label = "Download")
               ),
               class = "text-end"
             ),
@@ -696,27 +696,27 @@ ui <- bslib::page_navbar(
                   sortable::add_rank_list(
                     text = "none",
                     labels = c("variable_name", "estimate_name", "estimate_level", "sex", "age-group"),
-                    input_id = "summarise_all_concept_counts_gt_0_none"
+                    input_id = "summarise_concept_id_counts_gt_0_none"
                   ),
                   sortable::add_rank_list(
                     text = "header",
                     labels = "cdm_name",
-                    input_id = "summarise_all_concept_counts_gt_0_header"
+                    input_id = "summarise_concept_id_counts_gt_0_header"
                   ),
                   sortable::add_rank_list(
                     text = "group",
                     labels = c("omop_table","year"),
-                    input_id = "summarise_all_concept_counts_gt_0_group"
+                    input_id = "summarise_concept_id_counts_gt_0_group"
                   ),
                   sortable::add_rank_list(
                     text = "hide",
                     labels = c("study_period_end",	"study_period_start"),
-                    input_id = "summarise_all_concept_counts_gt_0_hide"
+                    input_id = "summarise_concept_id_counts_gt_0_hide"
                   )
                 ),
                 position = "right"
               ),
-              gt::gt_output("summarise_all_concept_counts_gt_0")
+              gt::gt_output("summarise_concept_id_counts_gt_0")
             )
           )
         )
