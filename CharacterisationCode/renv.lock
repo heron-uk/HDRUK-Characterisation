@@ -102,9 +102,13 @@
     },
     "OmopSketch": {
       "Package": "OmopSketch",
-      "Version": "0.2.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "0.2.1.900",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "OmopSketch",
+      "RemoteUsername": "OHDSI",
+      "RemoteSha": "9192df20ab93f0709e7011162e2213b294904c57",
       "Requirements": [
         "CDMConnector",
         "CohortConstructor",
@@ -122,7 +126,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "1267f40708ddba6cd56b623d5c386ad3"
+      "Hash": "5661fd8bcc9765e1d4f13f6d976595b1"
     },
     "PatientProfiles": {
       "Package": "PatientProfiles",
