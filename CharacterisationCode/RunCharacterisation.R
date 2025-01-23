@@ -11,7 +11,7 @@ log_message <- function(message) {
   cli::cli_inform(paste(Sys.time(), "-", message, "\n"))
 }
 
-log_message("Start time recorded.")
+log_message("Start time recorded. Code version: 1.0.4")
 
 tableName <- c("observation_period", "visit_occurrence", "condition_occurrence", "drug_exposure", "procedure_occurrence", 
                "device_exposure", "measurement" , "observation", "death")
