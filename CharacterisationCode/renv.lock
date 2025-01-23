@@ -108,7 +108,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "OmopSketch",
       "RemoteUsername": "OHDSI",
-      "RemoteSha": "9192df20ab93f0709e7011162e2213b294904c57",
+      "RemoteSha": "4aa895b2f59694a85d11035e42213e47c8a54900",
       "Requirements": [
         "CDMConnector",
         "CohortConstructor",
@@ -126,7 +126,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "5661fd8bcc9765e1d4f13f6d976595b1"
+      "Hash": "f3b649e75939531d809f2395d0b872bd"
     },
     "PatientProfiles": {
       "Package": "PatientProfiles",
