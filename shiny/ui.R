@@ -487,61 +487,12 @@ ui <- bslib::page_navbar(
               DT::dataTableOutput("summarise_missing_data_tidy")
             )
           )
-        ),
-        bslib::nav_panel(
-          title = "Formatted",
-          bslib::card(
-            full_screen = TRUE,
-            bslib::card_header(
-              bslib::popover(
-                shiny::icon("download"),
-                shinyWidgets::pickerInput(
-                  inputId = "summarise_missing_data_gt_0_download_type",
-                  label = "File type",
-                  selected = "docx",
-                  choices = c("docx", "png", "pdf", "html"),
-                  multiple = FALSE
-                ),
-                shiny::downloadButton(outputId = "summarise_missing_data_gt_0_download", label = "Download")
-              ),
-              class = "text-end"
-            ),
-            bslib::layout_sidebar(
-              sidebar = bslib::sidebar(
-                sortable::bucket_list(
-                  header = NULL,
-                  sortable::add_rank_list(
-                    text = "none",
-                    labels = c( "variable_name","sex", "age_group", "estimate_name"),
-                    input_id = "summarise_missing_data_gt_0_none"
-                  ),
-                  sortable::add_rank_list(
-                    text = "header",
-                    labels = "cdm_name",
-                    input_id = "summarise_missing_data_gt_0_header"
-                  ),
-                  sortable::add_rank_list(
-                    text = "group",
-                    labels = c("omop_table","year"),
-                    input_id = "summarise_missing_data_gt_0_group"
-                  ),
-                  sortable::add_rank_list(
-                    text = "hide",
-                    labels = c("study_period_end",	"study_period_start", "variable_level"),
-                    input_id = "summarise_missing_data_gt_0_hide"
-                  )
-                ),
-                position = "right"
-              ),
-              gt::gt_output("summarise_missing_data_gt_0")
-            )
-          )
         )
       )
     )
   ),
   bslib::nav_panel(
-    title = "Summarise all concept counts",
+    title = "Summarise concept_id counts",
     icon = shiny::icon("clipboard-list"),
     bslib::layout_sidebar(
       sidebar = bslib::sidebar(
@@ -668,55 +619,6 @@ ui <- bslib::page_navbar(
                 position = "right"
               ),
               DT::dataTableOutput("summarise_concept_id_counts_tidy")
-            )
-          )
-        ),
-        bslib::nav_panel(
-          title = "Formatted",
-          bslib::card(
-            full_screen = TRUE,
-            bslib::card_header(
-              bslib::popover(
-                shiny::icon("download"),
-                shinyWidgets::pickerInput(
-                  inputId = "summarise_concept_id_counts_gt_0_download_type",
-                  label = "File type",
-                  selected = "docx",
-                  choices = c("docx", "png", "pdf", "html"),
-                  multiple = FALSE
-                ),
-                shiny::downloadButton(outputId = "summarise_concept_id_counts_gt_0_download", label = "Download")
-              ),
-              class = "text-end"
-            ),
-            bslib::layout_sidebar(
-              sidebar = bslib::sidebar(
-                sortable::bucket_list(
-                  header = NULL,
-                  sortable::add_rank_list(
-                    text = "none",
-                    labels = c("variable_name", "estimate_name", "estimate_level", "sex", "age-group"),
-                    input_id = "summarise_concept_id_counts_gt_0_none"
-                  ),
-                  sortable::add_rank_list(
-                    text = "header",
-                    labels = "cdm_name",
-                    input_id = "summarise_concept_id_counts_gt_0_header"
-                  ),
-                  sortable::add_rank_list(
-                    text = "group",
-                    labels = c("omop_table","year"),
-                    input_id = "summarise_concept_id_counts_gt_0_group"
-                  ),
-                  sortable::add_rank_list(
-                    text = "hide",
-                    labels = c("study_period_end",	"study_period_start"),
-                    input_id = "summarise_concept_id_counts_gt_0_hide"
-                  )
-                ),
-                position = "right"
-              ),
-              gt::gt_output("summarise_concept_id_counts_gt_0")
             )
           )
         )
