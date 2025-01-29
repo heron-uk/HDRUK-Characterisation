@@ -229,34 +229,34 @@ server <- function(input, output, session) {
   )
   # ## output summarise_missing_data -----
   ## output 0 -----
-  createOutput26 <- shiny::reactive({
-    result <- data |>
-      filterData("summarise_missing_data", input)|>
-      dplyr::arrange(.data$strata_level)
-    header <- input$summarise_missing_data_gt_0_header
-    group <- input$summarise_missing_data_gt_0_group
-    hide <- input$summarise_missing_data_gt_0_hide
-    
-    if (is.null(header) || length(header) == 0) header <- c("cdm_name")
-    if (is.null(group) || length(group) == 0) group <- c("omop_table","year")
-    if (is.null(hide) || length(hide) == 0) hide <- c(	"study_period_end",	"study_period_start", "variable_level")
-    simpleTable(
-      result,
-      header = header,
-      group = group,
-      hide = hide
-    )
-  })
-  output$summarise_missing_data_gt_0 <- gt::render_gt({
-    createOutput26()
-  })
-  output$summarise_missing_data_gt_0_download <- shiny::downloadHandler(
-    filename = paste0("output_gt_summarise_missing_data.", input$summarise_missing_data_gt_0_download_type),
-    content = function(file) {
-      obj <- createOutput26()
-      gt::gtsave(data = obj, filename = file)
-    }
-  )
+  # createOutput26 <- shiny::reactive({
+  #   result <- data |>
+  #     filterData("summarise_missing_data", input)|>
+  #     dplyr::arrange(.data$strata_level)
+  #   header <- input$summarise_missing_data_gt_0_header
+  #   group <- input$summarise_missing_data_gt_0_group
+  #   hide <- input$summarise_missing_data_gt_0_hide
+  #   
+  #   if (is.null(header) || length(header) == 0) header <- c("cdm_name")
+  #   if (is.null(group) || length(group) == 0) group <- c("omop_table","year")
+  #   if (is.null(hide) || length(hide) == 0) hide <- c(	"study_period_end",	"study_period_start", "variable_level")
+  #   simpleTable(
+  #     result,
+  #     header = header,
+  #     group = group,
+  #     hide = hide
+  #   )
+  # })
+  # output$summarise_missing_data_gt_0 <- gt::render_gt({
+  #   createOutput26()
+  # })
+  # output$summarise_missing_data_gt_0_download <- shiny::downloadHandler(
+  #   filename = paste0("output_gt_summarise_missing_data.", input$summarise_missing_data_gt_0_download_type),
+  #   content = function(file) {
+  #     obj <- createOutput26()
+  #     gt::gtsave(data = obj, filename = file)
+  #   }
+  # )
 
 
   # summarise_concept_id_counts -----
@@ -303,35 +303,35 @@ server <- function(input, output, session) {
         readr::write_csv(file = file)
     }
   )
-  ## output summarise_concept_id_counts -----
-  ## output 0 -----
-  createOutput27 <- shiny::reactive({
-    result <- data |>
-      filterData("summarise_concept_id_counts", input)
-    header <- input$summarise_concept_id_counts_gt_0_header
-    group <- input$summarise_concept_id_counts_gt_0_group
-    hide <- input$summarise_concept_id_counts_gt_0_hide
-    
-    if (is.null(header) || length(header) == 0) header <- c("cdm_name")
-    if (is.null(group) || length(group) == 0) group <- c("omop_table","year")
-    if (is.null(hide) || length(hide) == 0) hide <- c("study_period_end",	"study_period_start")
-    simpleTable(
-      result,
-      header = header,
-      group = group,
-      hide = hide
-    )
-  })
-  output$summarise_concept_id_counts_gt_0 <- gt::render_gt({
-    createOutput27()
-  })
-  output$summarise_concept_id_counts_gt_0_download <- shiny::downloadHandler(
-    filename = paste0("output_gt_summarise_concept_id_counts.", input$summarise_concept_id_counts_gt_0_download_type),
-    content = function(file) {
-      obj <- createOutput27()
-      gt::gtsave(data = obj, filename = file)
-    }
-  )
+  # ## output summarise_concept_id_counts -----
+  # ## output 0 -----
+  # createOutput27 <- shiny::reactive({
+  #   result <- data |>
+  #     filterData("summarise_concept_id_counts", input)
+  #   header <- input$summarise_concept_id_counts_gt_0_header
+  #   group <- input$summarise_concept_id_counts_gt_0_group
+  #   hide <- input$summarise_concept_id_counts_gt_0_hide
+  #   
+  #   if (is.null(header) || length(header) == 0) header <- c("cdm_name")
+  #   if (is.null(group) || length(group) == 0) group <- c("omop_table","year")
+  #   if (is.null(hide) || length(hide) == 0) hide <- c("study_period_end",	"study_period_start")
+  #   simpleTable(
+  #     result,
+  #     header = header,
+  #     group = group,
+  #     hide = hide
+  #   )
+  # })
+  # output$summarise_concept_id_counts_gt_0 <- gt::render_gt({
+  #   createOutput27()
+  # })
+  # output$summarise_concept_id_counts_gt_0_download <- shiny::downloadHandler(
+  #   filename = paste0("output_gt_summarise_concept_id_counts.", input$summarise_concept_id_counts_gt_0_download_type),
+  #   content = function(file) {
+  #     obj <- createOutput27()
+  #     gt::gtsave(data = obj, filename = file)
+  #   }
+  # )
 
 
   # summarise_clinical_records -----
