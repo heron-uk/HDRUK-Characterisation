@@ -26,10 +26,35 @@ snapshot <- OmopSketch::summariseOmopSnapshot(cdm)
 
 # Population Characteristics
 log_message("Getting population characteristics")
-result_populationCharacteristics <- CohortConstructor::demographicsCohort(cdm, "population", ageRange = ageGroup, sex = "Both" ) |>
-  PatientProfiles::addDemographicsQuery(sex = TRUE, age = FALSE, ageGroup = ageGroup) |>
-  CohortConstructor::requireInDateRange(dateRange = dateRange)|>
-  CohortCharacteristics::summariseCharacteristics(strata = list("sex", "age_group") )
+
+cdm <- omopgenerics::bind(
+  CohortConstructor::demographicsCohort(cdm, "population_1", sex = "Both"),
+  CohortConstructor::demographicsCohort(cdm, "population_2", sex = "Both", ageRange = ageGroup),
+  name = "population"
+)
+
+
+set <- omopgenerics::settings(cdm$population) |>
+  dplyr::mutate(cohort_name = tolower(dplyr::if_else(
+    is.na(.data$age_range), "general_population", paste0("age_group_", .data$age_range)
+  ))) |>
+  dplyr::select("cohort_definition_id", "cohort_name")
+
+result_populationCharacteristics <- cdm$population |>
+  omopgenerics::newCohortTable(cohortSetRef = set, .softValidation = TRUE) |>
+  CohortConstructor::trimToDateRange(dateRange = dateRange) |>
+  PatientProfiles::addSexQuery() |>
+  CohortCharacteristics::summariseCharacteristics(
+    strata = list("sex"), 
+    estimates = list(
+      date = c("min", "q25", "median", "q75", "max"),
+      numeric = c("min", "q25", "median", "q75", "max", "mean", "sd", "density"),
+      categorical = c("count", "percentage"),
+      binary = c("count", "percentage")
+    )
+  )
+
+omopgenerics::dropSourceTable(cdm = cdm, c("population_1", "population_2", "population"))
 
 # Summarise missing data
 log_message("Summarising missing data")
