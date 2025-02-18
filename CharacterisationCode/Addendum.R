@@ -59,8 +59,12 @@ result_inObservation <- OmopSketch::summariseInObservation(cdm$observation_perio
                                                            sex = sex,
                                                            ageGroup = ageGroup,
                                                            dateRange = dateRange) 
+log_message("Summarising missing data - person table")
 
-result <- omopgenerics::bind(result_populationCharacteristicsOverall, result_inObservation, result_observationPeriod)
+result_missingDataPerson <- OmopSketch::summariseMissingData(cdm,
+                                                             omopTableName = "person")
+
+result <- omopgenerics::bind(result_populationCharacteristics, result_inObservation, result_missingDataPerson)
 omopgenerics::exportSummarisedResult(result, minCellCount = minCellCount, path = outputFolder, fileName = "result_addendum_{cdm_name}.csv")
 
 
