@@ -201,7 +201,7 @@ ui <- bslib::page_navbar(
               ),
               class = "text-end"
             ),
-           
+            
             #   sidebar = bslib::sidebar(
             #     sortable::bucket_list(
             #       header = NULL,
@@ -584,7 +584,7 @@ ui <- bslib::page_navbar(
                               ),
                               class = "text-end"
                             ),
-                              DT::dataTableOutput("summarise_clinical_records_gt_15")
+                            DT::dataTableOutput("summarise_clinical_records_gt_15")
                             
                           )
                         )
@@ -742,7 +742,7 @@ ui <- bslib::page_navbar(
                             #     ),
                             #     position = "right"
                             #   ),
-                              DT::dataTableOutput("summarise_record_count_gt_0")
+                            DT::dataTableOutput("summarise_record_count_gt_0")
                             #)
                           )
                         ),
@@ -1069,7 +1069,7 @@ ui <- bslib::page_navbar(
                             #     ),
                             #     position = "right"
                             #   ),
-                              DT::dataTableOutput("summarise_in_observation_gt_0")
+                            DT::dataTableOutput("summarise_in_observation_gt_0")
                             #)
                           )
                         ),

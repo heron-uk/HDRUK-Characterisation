@@ -19,8 +19,9 @@ cdm <- CDMConnector::cdmFromCon(con = con,
 minCellCount = 5
 
 
-# set Addendum = FALSE if you want to run the all characterisation
-Addendum <- TRUE
+# set Addendum = FALSE if you want to run the all characterisation, 
+# set Addendum = TRUE if you want to run only the addendum  
+Addendum <- ...
 
 
 if (!Addendum){
