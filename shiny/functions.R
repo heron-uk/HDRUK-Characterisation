@@ -234,21 +234,23 @@ summaryCard <- function(result) {
 simpleTable <- function(result,
                         header = character(),
                         group = character(),
-                        hide = character()) {
+                        hide = character(), 
+                        estimateNumeric = FALSE,
+                        type = "gt") {
   # initial checks
   if (length(header) == 0) header <- character()
   if (length(group) == 0) group <- NULL
   if (length(hide) == 0) hide <- character()
-
+  
   if (nrow(result) == 0) {
     return(gt::gt(dplyr::tibble()))
   }
-
+  
   result <- result |>
     omopgenerics::addSettings() |>
     omopgenerics::splitAll() |>
     dplyr::select(-"result_id")
-
+  
   # format estimate column
   formatEstimates <- c(
     "N (%)" = "<count> (<percentage>%)",
@@ -274,8 +276,11 @@ simpleTable <- function(result,
       tidyr::unite(col = !!id, dplyr::all_of(group), sep = "; ", remove = TRUE)
     group <- id
   }
+  
+  if (estimateNumeric) result <- result|>dplyr::mutate(estimate_value = suppressWarnings(dplyr::if_else(.data$estimate_value == "-", NA_integer_, as.numeric(.data$estimate_value))))
   result <- result |>
-    visOmopResults::formatTable(groupColumn = group)
+    visOmopResults::formatTable(groupColumn = group, type = type)
+ 
   return(result)
 }
 prepareResult <- function(result, resultList) {
@@ -336,4 +341,87 @@ defaultFilterValues <- function(result, resultList) {
       return(res)
     }) |>
     purrr::flatten()
+}
+
+
+
+tableClinicalRecordsLocal <- function(result,
+                                 type = "gt") {
+  # initial checks
+  rlang::check_installed("visOmopResults")
+  omopgenerics::validateResultArgument(result)
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
+  
+  # subset to result_type of interest
+  result <- result |>
+    omopgenerics::filterSettings(
+      .data$result_type == "summarise_clinical_records")
+  
+  # check if it is empty
+  if (nrow(result) == 0) {
+    warnEmpty("summarise_clinical_records")
+    return(emptyTable(type))
+  }
+  if (type=="datatable" & result |> dplyr::distinct(.data$cdm_name)|>dplyr::tally()|>dplyr::pull(n)>1) header <- c("cdm_name") else header <- NULL
+  
+  
+  result |>
+    formatColumn(c("variable_name", "variable_level")) |>
+    visOmopResults::visOmopTable(
+      type = type,
+      estimateName = c(
+        "N (%)" = "<count> (<percentage>%)",
+        "N" = "<count>",
+        "Mean (SD)" = "<mean> (<sd>)"),
+      header = header,
+      groupColumn = c("omop_table", omopgenerics::strataColumns(result))
+    )
+}
+
+tableObservationPeriodLocal <- function(result,
+                                   type = "gt") {
+  # initial checks
+  rlang::check_installed("visOmopResults")
+  omopgenerics::validateResultArgument(result)
+  omopgenerics::assertChoice(type, visOmopResults::tableType())
+  
+  # subset to result_type of interest
+  result <- result |>
+    omopgenerics::filterSettings(
+      .data$result_type == "summarise_observation_period")
+  
+  # check if it is empty
+  if (nrow(result) == 0) {
+    warnEmpty("summarise_observation_period")
+    return(emptyTable(type))
+  }
+  if (type=="datatable" & result |> dplyr::distinct(.data$cdm_name)|>dplyr::tally()|>dplyr::pull(n)>1) header <- c("cdm_name") else header <- NULL
+  
+  result |>
+    dplyr::filter(is.na(.data$variable_level)) |> # to remove density
+    formatColumn("variable_name") |>
+    # Arrange by observation period ordinal
+    dplyr::mutate(order = dplyr::coalesce(as.numeric(stringr::str_extract(.data$group_level, "\\d+")),0)) |>
+    dplyr::arrange(.data$order) |>
+    dplyr::select(-"order") |>
+    visOmopResults::visOmopTable(
+      estimateName = c(
+        "N" = "<count>",
+        "mean (sd)" = "<mean> (<sd>)",
+        "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"),
+      header = header,
+      groupColumn = omopgenerics::strataColumns(result),
+      hide = c(
+        "result_id", "estimate_type", "strata_name", "variable_level"),
+      type = type,
+      .options = list(keepNotFormatted = FALSE) # to consider removing this? If
+      # the user adds some custom estimates they are not going to be displayed in
+    )
+}
+formatColumn <- function(result, col) {
+  for (x in col) {
+    result <- result |>
+      dplyr::mutate(!!x := gsub("_", " ", stringr::str_to_sentence(.data[[x]])))
+  }
+  return(result)
 }
