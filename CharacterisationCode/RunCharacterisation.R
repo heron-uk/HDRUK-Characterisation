@@ -64,6 +64,9 @@ result_missingData <- OmopSketch::summariseMissingData(cdm ,
                                                        ageGroup = ageGroup, 
                                                        year = TRUE, 
                                                        dateRange = dateRange)
+                                       
+
+
 
 # Summarise concept counts
 log_message("Summarising concept id counts")
@@ -112,8 +115,12 @@ result_observationPeriod <- OmopSketch::summariseObservationPeriod(cdm$observati
                                                                    ageGroup = ageGroup, 
                                                                    dateRange = dateRange)
 
+log_message("Summarising missing data - person table")
+
+result_missingDataPerson <- OmopSketch::summariseMissingData(cdm,
+                                                             omopTableName = "person")
 # Combine results and export
-result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_missingData, result_conceptIdCount, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod)
+result <- omopgenerics::bind(snapshot, result_populationCharacteristics, result_missingData, result_conceptIdCount, result_clinicalRecords, result_recordCounts, result_inObservation, result_observationPeriod, result_missingDataPerson)
 omopgenerics::exportSummarisedResult(result, minCellCount = minCellCount, path = outputFolder, fileName = paste0(
   "result_characterisation_", dbName, ".csv"))
 
