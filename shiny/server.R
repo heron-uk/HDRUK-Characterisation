@@ -151,6 +151,7 @@ server <- function(input, output, session) {
       dplyr::select(!"result_id")|>
       dplyr::mutate(estimate_value = suppressWarnings(dplyr::if_else(.data$estimate_value == "-", NA_integer_, as.numeric(.data$estimate_value))))
     
+
     # columns to eliminate
     colsEliminate <- colnames(res)
     colsEliminate <- colsEliminate[!colsEliminate %in% c(
@@ -173,6 +174,7 @@ server <- function(input, output, session) {
       dplyr::select(!dplyr::any_of(colsEliminate))
   })
   output$summarise_missing_data_tidy <- DT::renderDT({
+  
     DT::datatable(
       getTidyDataSummariseMissingData(),
       options = list(scrollX = TRUE),

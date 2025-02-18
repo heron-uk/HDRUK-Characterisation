@@ -1,13 +1,13 @@
 # shiny is prepared to work with this resultList, please do not change them
 resultList <- list(
-  "summarise_omop_snapshot" = c(1L),
-  "summarise_characteristics" = c(2L),
-  "summarise_missing_data" = c(3L),
-  "summarise_concept_id_counts" = c(4L),
-  "summarise_clinical_records" = c(5L),
-  "summarise_record_count" = c(6L),
-  "summarise_in_observation" = c(7L),
-  "summarise_observation_period" = c(8L)
+  "summarise_omop_snapshot" ,
+  "summarise_characteristics",
+  "summarise_missing_data" ,
+  "summarise_concept_id_counts",
+  "summarise_clinical_records" ,
+  "summarise_record_count" ,
+  "summarise_in_observation" ,
+  "summarise_observation_period"
 )
 
 source(file.path(getwd(), "functions.R"))
@@ -24,7 +24,12 @@ result <- purrr::map(csv_files, \(x){
   omopgenerics::newSummarisedResult()
 
 # result <- omopgenerics::importSummarisedResult(file.path(getwd(), "data"))
-
+resultList <- resultList |>
+  purrr::map(\(x) {
+    omopgenerics::settings(result) |>
+  dplyr::filter(.data$result_type %in% .env$x) |>
+  dplyr::pull(.data$result_id) }) |>
+  rlang::set_names(resultList)
 data <- prepareResult(result, resultList)
 filterValues <- defaultFilterValues(result, resultList)
 
