@@ -12,7 +12,7 @@ ui <- bslib::page_navbar(
     ),
     ""
   ),
-  theme = bslib::bs_theme(preset = "cerulean"), #cerulean
+  theme = bslib::bs_theme(bootswatch = "flatly"), #cerulean
   bslib::nav_panel(
     title = "Background",
     icon = shiny::icon("disease"),
@@ -112,7 +112,7 @@ ui <- bslib::page_navbar(
               inputId = "summarise_characteristics_grouping_sex",
               label = "Sex",
               choices = filterValues$summarise_characteristics_grouping_sex,
-              selected = filterValues$summarise_characteristics_grouping_sex,
+              selected = "overall",
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
@@ -150,39 +150,6 @@ ui <- bslib::page_navbar(
         )
       ),
       bslib::navset_card_tab(
-        bslib::nav_panel(
-          title = "Tidy",
-          bslib::card(
-            full_screen = TRUE,
-            bslib::card_header(
-              bslib::popover(
-                shiny::icon("download"),
-                shiny::downloadButton(outputId = "summarise_characteristics_tidy_download", label = "Download csv")
-              ),
-              class = "text-end"
-            ),
-            bslib::layout_sidebar(
-              sidebar = bslib::sidebar(
-                shinyWidgets::pickerInput(
-                  inputId = "summarise_characteristics_tidy_columns",
-                  label = "Columns",
-                  choices = filterValues$summarise_characteristics_tidy_columns,
-                  selected = filterValues$summarise_characteristics_tidy_columns,
-                  multiple = TRUE,
-                  options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                ),
-                shiny::radioButtons(
-                  inputId = "summarise_characteristics_tidy_pivot",
-                  label = "Pivot estimates/variables",
-                  choices = c("none", "estimates", "estimates and variables"),
-                  selected = "none"
-                ),
-                position = "right"
-              ),
-              DT::dataTableOutput("summarise_characteristics_tidy")
-            )
-          )
-        ),
         bslib::nav_panel(
           title = "Formatted",
           bslib::card(
@@ -228,7 +195,7 @@ ui <- bslib::page_navbar(
             #     ),
             #     position = "right"
             #   ),
-            DT::dataTableOutput("summarise_characteristics_gt_7")
+            gt::gt_output("summarise_characteristics_gt_7")
             
           )
         ),
@@ -329,7 +296,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_missing_data_grouping_omop_table",
                               label = "Omop table",
                               choices = filterValues$summarise_missing_data_grouping_omop_table,
-                              selected = filterValues$summarise_missing_data_grouping_omop_table,
+                              selected = c("drug_exposure"),
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -337,7 +304,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_missing_data_grouping_age_group",
                               label = "Age group",
                               choices = filterValues$summarise_missing_data_grouping_age_group,
-                              selected = filterValues$summarise_missing_data_grouping_age_group,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -345,7 +312,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_missing_data_grouping_sex",
                               label = "Sex",
                               choices = filterValues$summarise_missing_data_grouping_sex,
-                              selected = filterValues$summarise_missing_data_grouping_sex,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -353,7 +320,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_missing_data_grouping_year",
                               label = "Year",
                               choices = filterValues$summarise_missing_data_grouping_year,
-                              selected = filterValues$summarise_missing_data_grouping_year,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             )
@@ -400,14 +367,14 @@ ui <- bslib::page_navbar(
                                   inputId = "summarise_missing_data_tidy_columns",
                                   label = "Columns",
                                   choices = filterValues$summarise_missing_data_tidy_columns,
-                                  selected = filterValues$summarise_missing_data_tidy_columns,
+                                  selected = c("cdm_name",	"omop_table",	"age_group","sex",	"year",	"variable_name",	"estimate_name", "estimate_value"),
                                   multiple = TRUE,
                                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                                 ),
                                 shiny::radioButtons(
                                   inputId = "summarise_missing_data_tidy_pivot",
                                   label = "Pivot estimates/variables",
-                                  choices = c("none", "estimates", "estimates and variables"),
+                                  choices = c("none", "estimates"),
                                   selected = "none"
                                 ),
                                 position = "right"
@@ -446,7 +413,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_clinical_records_grouping_age_group",
                               label = "Age group",
                               choices = filterValues$summarise_clinical_records_grouping_age_group,
-                              selected = filterValues$summarise_clinical_records_grouping_age_group,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -454,7 +421,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_clinical_records_grouping_sex",
                               label = "Sex",
                               choices = filterValues$summarise_clinical_records_grouping_sex,
-                              selected = filterValues$summarise_clinical_records_grouping_sex,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             )
@@ -501,14 +468,14 @@ ui <- bslib::page_navbar(
                                   inputId = "summarise_clinical_records_tidy_columns",
                                   label = "Columns",
                                   choices = filterValues$summarise_clinical_records_tidy_columns,
-                                  selected = filterValues$summarise_clinical_records_tidy_columns,
+                                  selected = c("cdm_name",	"omop_table",	"age_group","sex",	"year",	"variable_name","variable_level",	"estimate_name", "estimate_value"),
                                   multiple = TRUE,
                                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                                 ),
                                 shiny::radioButtons(
                                   inputId = "summarise_clinical_records_tidy_pivot",
                                   label = "Pivot estimates/variables",
-                                  choices = c("none", "estimates", "estimates and variables"),
+                                  choices = c("none","estimates","estimates and variables"),
                                   selected = "none"
                                 ),
                                 position = "right"
@@ -584,7 +551,7 @@ ui <- bslib::page_navbar(
                               ),
                               class = "text-end"
                             ),
-                            DT::dataTableOutput("summarise_clinical_records_gt_15")
+                            gt::gt_output("summarise_clinical_records_gt_15")
                             
                           )
                         )
@@ -618,7 +585,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_record_count_grouping_age_group",
                               label = "Age group",
                               choices = filterValues$summarise_record_count_grouping_age_group,
-                              selected = filterValues$summarise_record_count_grouping_age_group,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -626,7 +593,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_record_count_grouping_sex",
                               label = "Sex",
                               choices = filterValues$summarise_record_count_grouping_sex,
-                              selected = filterValues$summarise_record_count_grouping_sex,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -634,7 +601,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_record_count_grouping_time_interval",
                               label = "Time interval",
                               choices = filterValues$summarise_record_count_grouping_time_interval,
-                              selected = filterValues$summarise_record_count_grouping_time_interval,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             )
@@ -664,39 +631,7 @@ ui <- bslib::page_navbar(
                         )
                       ),
                       bslib::navset_card_tab(
-                        bslib::nav_panel(
-                          title = "Tidy",
-                          bslib::card(
-                            full_screen = TRUE,
-                            bslib::card_header(
-                              bslib::popover(
-                                shiny::icon("download"),
-                                shiny::downloadButton(outputId = "summarise_record_count_tidy_download", label = "Download csv")
-                              ),
-                              class = "text-end"
-                            ),
-                            bslib::layout_sidebar(
-                              sidebar = bslib::sidebar(
-                                shinyWidgets::pickerInput(
-                                  inputId = "summarise_record_count_tidy_columns",
-                                  label = "Columns",
-                                  choices = filterValues$summarise_record_count_tidy_columns,
-                                  selected = filterValues$summarise_record_count_tidy_columns,
-                                  multiple = TRUE,
-                                  options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                                ),
-                                shiny::radioButtons(
-                                  inputId = "summarise_record_count_tidy_pivot",
-                                  label = "Pivot estimates/variables",
-                                  choices = c("none", "estimates", "estimates and variables"),
-                                  selected = "none"
-                                ),
-                                position = "right"
-                              ),
-                              DT::dataTableOutput("summarise_record_count_tidy")
-                            )
-                          )
-                        ),
+                        
                         bslib::nav_panel(
                           title = "Formatted",
                           bslib::card(
@@ -742,7 +677,7 @@ ui <- bslib::page_navbar(
                             #     ),
                             #     position = "right"
                             #   ),
-                            DT::dataTableOutput("summarise_record_count_gt_0")
+                            gt::gt_output("summarise_record_count_gt_0")
                             #)
                           )
                         ),
@@ -784,9 +719,9 @@ ui <- bslib::page_navbar(
                                 shiny::selectizeInput(
                                   inputId = "summarise_record_count_ggplot2_16_colour",
                                   label = "Colour",
-                                  selected = "cdm_name",
+                                  selected = "omop_table",
                                   multiple = TRUE,
-                                  choices = c("cdm_name", "age_group", "sex"),
+                                  choices = c("cdm_name", "age_group", "sex", "omop_table"),
                                   options = list(plugins = "remove_button")
                                 ),
                                 shiny::selectizeInput(
@@ -794,7 +729,7 @@ ui <- bslib::page_navbar(
                                   label = "Facet",
                                   selected = "cdm_name",
                                   multiple = TRUE,
-                                  choices = c("cdm_name", "age_group", "sex"),
+                                  choices = c("cdm_name", "age_group", "sex", "omop_table"),
                                   options = list(plugins = "remove_button")
                                 ),
                                 position = "right"
@@ -825,7 +760,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_concept_id_counts_grouping_omop_table",
                               label = "Omop table",
                               choices = filterValues$summarise_concept_id_counts_grouping_omop_table,
-                              selected = filterValues$summarise_concept_id_counts_grouping_omop_table,
+                              selected = c("drug_exposure"),
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -833,7 +768,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_concept_id_counts_grouping_age_group",
                               label = "Age group",
                               choices = filterValues$summarise_concept_id_counts_grouping_age_group,
-                              selected = filterValues$summarise_concept_id_counts_grouping_age_group,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -841,7 +776,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_concept_id_counts_grouping_sex",
                               label = "Sex",
                               choices = filterValues$summarise_concept_id_counts_grouping_sex,
-                              selected = filterValues$summarise_concept_id_counts_grouping_sex,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -849,18 +784,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_concept_id_counts_grouping_year",
                               label = "Year",
                               choices = filterValues$summarise_concept_id_counts_grouping_year,
-                              selected = filterValues$summarise_concept_id_counts_grouping_year,
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            )
-                          ),
-                          bslib::accordion_panel(
-                            title = "Variables",
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_concept_id_counts_variable_name",
-                              label = "Variable name",
-                              choices = filterValues$summarise_concept_id_counts_variable_name,
-                              selected = filterValues$summarise_concept_id_counts_variable_name,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             )
@@ -895,7 +819,7 @@ ui <- bslib::page_navbar(
                                 shinyWidgets::pickerInput(
                                   inputId = "summarise_concept_id_counts_tidy_columns",
                                   label = "Columns",
-                                  choices = filterValues$summarise_concept_id_counts_tidy_columns,
+                                  choices = c("cdm_name",	"omop_table",	"age_group","sex",	"year",	"variable_name","variable_level",	"estimate_name", "estimate_value"),
                                   selected = filterValues$summarise_concept_id_counts_tidy_columns,
                                   multiple = TRUE,
                                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -903,7 +827,7 @@ ui <- bslib::page_navbar(
                                 shiny::radioButtons(
                                   inputId = "summarise_concept_id_counts_tidy_pivot",
                                   label = "Pivot estimates/variables",
-                                  choices = c("none", "estimates", "estimates and variables"),
+                                  choices = c("none", "estimates"),
                                   selected = "none"
                                 ),
                                 position = "right"
@@ -945,7 +869,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_in_observation_grouping_sex",
                               label = "Sex",
                               choices = filterValues$summarise_in_observation_grouping_sex,
-                              selected = filterValues$summarise_in_observation_grouping_sex,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -953,7 +877,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_in_observation_grouping_age_group",
                               label = "Age group",
                               choices = filterValues$summarise_in_observation_grouping_age_group,
-                              selected = filterValues$summarise_in_observation_grouping_age_group,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -991,39 +915,7 @@ ui <- bslib::page_navbar(
                         )
                       ),
                       bslib::navset_card_tab(
-                        bslib::nav_panel(
-                          title = "Tidy",
-                          bslib::card(
-                            full_screen = TRUE,
-                            bslib::card_header(
-                              bslib::popover(
-                                shiny::icon("download"),
-                                shiny::downloadButton(outputId = "summarise_in_observation_tidy_download", label = "Download csv")
-                              ),
-                              class = "text-end"
-                            ),
-                            bslib::layout_sidebar(
-                              sidebar = bslib::sidebar(
-                                shinyWidgets::pickerInput(
-                                  inputId = "summarise_in_observation_tidy_columns",
-                                  label = "Columns",
-                                  choices = filterValues$summarise_in_observation_tidy_columns,
-                                  selected = filterValues$summarise_in_observation_tidy_columns,
-                                  multiple = TRUE,
-                                  options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                                ),
-                                shiny::radioButtons(
-                                  inputId = "summarise_in_observation_tidy_pivot",
-                                  label = "Pivot estimates/variables",
-                                  choices = c("none", "estimates", "estimates and variables"),
-                                  selected = "none"
-                                ),
-                                position = "right"
-                              ),
-                              DT::dataTableOutput("summarise_in_observation_tidy")
-                            )
-                          )
-                        ),
+                        
                         bslib::nav_panel(
                           title = "Formatted",
                           bslib::card(
@@ -1069,7 +961,7 @@ ui <- bslib::page_navbar(
                             #     ),
                             #     position = "right"
                             #   ),
-                            DT::dataTableOutput("summarise_in_observation_gt_0")
+                            gt::gt_output("summarise_in_observation_gt_0")
                             #)
                           )
                         ),
@@ -1171,7 +1063,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_observation_period_grouping_age_group",
                               label = "Age group",
                               choices = filterValues$summarise_observation_period_grouping_age_group,
-                              selected = filterValues$summarise_observation_period_grouping_age_group,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -1179,7 +1071,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_observation_period_grouping_sex",
                               label = "Sex",
                               choices = filterValues$summarise_observation_period_grouping_sex,
-                              selected = filterValues$summarise_observation_period_grouping_sex,
+                              selected = "overall",
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             )
@@ -1209,39 +1101,7 @@ ui <- bslib::page_navbar(
                         )
                       ),
                       bslib::navset_card_tab(
-                        bslib::nav_panel(
-                          title = "Tidy",
-                          bslib::card(
-                            full_screen = TRUE,
-                            bslib::card_header(
-                              bslib::popover(
-                                shiny::icon("download"),
-                                shiny::downloadButton(outputId = "summarise_observation_period_tidy_download", label = "Download csv")
-                              ),
-                              class = "text-end"
-                            ),
-                            bslib::layout_sidebar(
-                              sidebar = bslib::sidebar(
-                                shinyWidgets::pickerInput(
-                                  inputId = "summarise_observation_period_tidy_columns",
-                                  label = "Columns",
-                                  choices = filterValues$summarise_observation_period_tidy_columns,
-                                  selected = filterValues$summarise_observation_period_tidy_columns,
-                                  multiple = TRUE,
-                                  options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                                ),
-                                shiny::radioButtons(
-                                  inputId = "summarise_observation_period_tidy_pivot",
-                                  label = "Pivot estimates/variables",
-                                  choices = c("none", "estimates", "estimates and variables"),
-                                  selected = "none"
-                                ),
-                                position = "right"
-                              ),
-                              DT::dataTableOutput("summarise_observation_period_tidy")
-                            )
-                          )
-                        ),
+                        
                         bslib::nav_panel(
                           title = "Formatted",
                           bslib::card(
@@ -1260,7 +1120,7 @@ ui <- bslib::page_navbar(
                               ),
                               class = "text-end"
                             ),
-                            DT::dataTableOutput("summarise_observation_period_gt_15")
+                            gt::gt_output("summarise_observation_period_gt_15")
                           )
                         ),
                         bslib::nav_panel(
