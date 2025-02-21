@@ -23,6 +23,8 @@ library(yaml)
 
 # preprocess data if it has not been done
 fileData <- file.path(getwd(), "data", "shinyData.RData")
+
+
 if (!file.exists(fileData)) {
   source(file.path(getwd(), "data", "preprocess.R"))
 }
@@ -32,6 +34,7 @@ if (!file.exists(fileData)) {
 
 # load shiny data
 load(fileData)
+
 
 # source functions
 source(file.path(getwd(), "functions.R"))

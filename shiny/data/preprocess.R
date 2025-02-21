@@ -36,3 +36,4 @@ filterValues <- defaultFilterValues(result, resultList)
 save(data, filterValues, file = file.path(getwd(), "data", "shinyData.RData"))
 
 rm(result, filterValues, resultList, data)
+
