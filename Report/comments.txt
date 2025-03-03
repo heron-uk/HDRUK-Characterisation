@@ -1,0 +1,9 @@
+Barts Health
+- A different *cdmName* was used between benchmark and characterisation, it would be nice to homogenise.
+- There are individuals deffined in the person table that does not have an associated observation period.
+- 746k records observed in death table, for only 25k individuals.
+- 14% of concepts in condition occurrence are non standard concepts.
+- 19% of concepts in drug exposure are non standard concepts.
+- 72% of concepts in procedure occurrence are non standard concepts.
+- 40% of concepts in measurement are non standard concepts.
+- 8% of death records captured after observation period end date.

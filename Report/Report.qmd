@@ -1,0 +1,294 @@
+---
+title: "HERON onboarding"
+format: docx
+date: today
+execute: 
+  echo: false
+  message: false
+---
+
+```{r, echo=FALSE, message=FALSE}
+source("functions.R")
+cdmName1 <- "Barts Health"
+cdmName2 <- "Barts"
+benchmark <- omopgenerics::importSummarisedResult(here::here("data", "benchmark")) |>
+  dplyr::filter(.data$cdm_name == .env$cdmName1)
+benchmark <- benchmark |>
+  omopgenerics::settings() |>
+  dplyr::pull("result_type") |>
+  rlang::set_names() |>
+  purrr::map(\(x) {
+    benchmark |>
+      omopgenerics::filterSettings(.data$result_type == .env$x) |>
+      omopgenerics::tidy() |>
+      dplyr::pull("time_seconds") |>
+      sum() |> 
+      getTime()
+  })
+results <- omopgenerics::importSummarisedResult(here::here("data", "characterisation")) |>
+  dplyr::filter(.data$cdm_name == .env$cdmName2) |>
+  dplyr::mutate(estimate_value = dplyr::if_else(
+    .data$estimate_name == "percentage" & suppressWarnings(as.numeric(.data$estimate_value) > 100),
+    "100",
+    .data$estimate_value
+  ))
+snapshot <- results |>
+  omopgenerics::filterSettings(.data$result_type == "summarise_omop_snapshot")
+```
+
+## Database metadata
+
+```{r, echo=FALSE}
+dplyr::tribble(
+  ~metadata, ~value,
+  "CDM name", cdmName1,
+  "Source name", snapshot$estimate_value[snapshot$estimate_name == "source_name"],
+  "Snapshot date", snapshot$estimate_value[snapshot$estimate_name == "snapshot_date"],
+  "Data release date", snapshot$estimate_value[snapshot$estimate_name == "release_date"],
+  "Number individuals", snapshot$estimate_value[snapshot$estimate_name == "person_count"],
+  "Number observation periods", snapshot$estimate_value[snapshot$estimate_name == "count"],
+  "Observation periods range", paste0(snapshot$estimate_value[snapshot$estimate_name == "start_date"], " to ", snapshot$estimate_value[snapshot$estimate_name == "end_date"]),
+  "CDM version", snapshot$estimate_value[snapshot$estimate_name == "version"],
+  "Vocabulary version", snapshot$estimate_value[snapshot$estimate_name == "vocabulary_version"],
+  "DBMS", snapshot$estimate_value[snapshot$estimate_name == "source_type"],
+) |>
+  gt::gt()
+```
+
+## Benchmark
+
+All benchmarks were ran successfully with the following times:
+
+- General benchmark: `r benchmark$summarise_general_benchmark`.
+- *CDMConnector* benchmark: `r benchmark$summarise_cdm_connector_benchmark`.
+- *IncidencePrevalence* benchmark: `r benchmark$summarise_incidence_prevalence_benchmark`.
+- *CohortCharcateristics* benchmark: `r benchmark$summarise_cohort_characteristics_benchmark`.
+
+Detailed information of each benchmarked task is reported: in a *ShinyApp* <https://dpa-pde-oxford.shinyapps.io/benchmark-hdruk/>.
+
+## Characterisation
+
+Characterisation successfully run for data between '2012-01-01' and '2024-12-31'.
+
+### Demographics
+
+```{r}
+demo <- results |>
+  omopgenerics::filterSettings(.data$result_type == "summarise_characteristics") |>
+  omopgenerics::tidy()
+npop <- demo |>
+  dplyr::filter(.data$variable_name == "Number records", .data$sex == "overall", .data$age_group == "overall") |>
+  dplyr::select("cohort_name", "count")
+age <- demo |>
+  dplyr::filter(.data$variable_name == "Age", .data$sex == "overall", .data$age_group == "overall") |>
+  dplyr::select("cohort_name", "mean", "sd")
+meanAge <- npop |>
+  dplyr::inner_join(age, by = "cohort_name") |>
+  dplyr::mutate(p = .data$count / sum(.data$count)) |>
+  dplyr::summarise(mean = sum(.data$mean * .data$p)) |>
+  dplyr::pull()
+sdAge <- npop |>
+  dplyr::inner_join(age, by = "cohort_name") |>
+  dplyr::mutate(p = .data$count / sum(.data$count)) |>
+  dplyr::summarise(sd = sqrt(sum((.data$sd ** 2) * (.data$p ** 2) ))) |>
+  dplyr::pull()
+age <- sprintf('%.1f [%.1f]', meanAge, sdAge)
+age_group <- demo |>
+  dplyr::filter(
+    .data$age_group != "overall",  .data$variable_name == "Number records"
+  ) |>
+  dplyr::filter(.data$count == max(.data$count)) |>
+  dplyr::pull("age_group")
+sex <- demo |>
+  dplyr::filter(
+    .data$variable_name == "Sex", 
+    .data$variable_level == "Male", 
+    .data$sex == "overall", 
+    .data$age_group == "overall"
+  ) |>
+  dplyr::pull("count") |>
+  sum() / sum(npop$count) * 100
+sex <- sprintf("%.f", sex)
+prior_observation <- demo |>
+  dplyr::filter(
+    .data$variable_name == "Prior observation", 
+    .data$sex == "overall", 
+    .data$age_group == "overall"
+  ) |>
+  dplyr::select("cohort_name", "mean", "sd") |>
+  dplyr::inner_join(npop, by = "cohort_name") |>
+  dplyr::mutate(p = .data$count / sum(.data$count)) |>
+  dplyr::summarise(mean = sum(.data$mean * .data$p)) |>
+  dplyr::pull()
+prior_observation <- sprintf("%.f", prior_observation)
+future_observation <- demo |>
+  dplyr::filter(
+    .data$variable_name == "Future observation", 
+    .data$sex == "overall", 
+    .data$age_group == "overall"
+  ) |>
+  dplyr::select("cohort_name", "mean", "sd") |>
+  dplyr::inner_join(npop, by = "cohort_name") |>
+  dplyr::mutate(p = .data$count / sum(.data$count)) |>
+  dplyr::summarise(mean = sum(.data$mean * .data$p)) |>
+  dplyr::pull()
+future_observation <- sprintf("%.f", future_observation)
+```
+
+Age (mean [standard deviation]) at start of observation (the earliest of 2012-01-01 and patient joining the database) is: `r age`. The most common age group is `r age_group` years old and `r sex`% of patients are Females. Mean prior observation and future observation are: `r prior_observation` and `r future_observation` days, respectively.
+
+### Observation period
+
+```{r}
+obs <- results |> 
+  omopgenerics::filterSettings(.data$result_type == "summarise_observation_period") |>
+  omopgenerics::tidy() |>
+  dplyr::filter(.data$age_group == "overall", .data$sex == "overall", is.na(.data$variable_level), .data$observation_period_ordinal == "all")
+nObs <- snapshot$estimate_value[snapshot$estimate_name == "count"]
+inObs <- 100 * as.numeric(obs$count[obs$variable_name == "Number records"]) / as.numeric(nObs)
+inObs <- sprintf("%.1f", inObs)
+medianObs <- obs$median[obs$variable_name == "Duration in days"]
+if (obs$max[obs$variable_name == "Records per person"] == 1) {
+  followingObs <- "Only a single observation period is defined by person."
+} else {
+  followingObs <- paste0(
+    "More than one observation period defined by person with a mean of ",
+    sprintf("%.2f", obs$mean[obs$variable_name == "Records per person"]), 
+    " records per person and a median distance of ",
+    obs$mean[obs$variable_name == "Days to next observation period"],
+    " days between observation periods."
+  )
+}
+```
+
+A total of `r nObs` observation periods are defined in observation period table, `r inObs`% of them started within our characterisation period. The median length of these observation periods is `r medianObs` days. `r followingObs`
+
+In the following figure we can see the amount of follow-up stratified by age group, sex and year:
+```{r, dpi=300, fig.width=7}
+x <- results |> 
+  omopgenerics::filterSettings(.data$result_type == "summarise_in_observation") |>
+  omopgenerics::tidy() |>
+  dplyr::filter(.data$sex %in% c("Male", "Female"), .data$age_group != "overall", .data$variable_name == "Number person-days", .data$time_interval != "overall") |>
+  dplyr::mutate(
+    person_years = .data$count / 365.25, 
+    year = as.integer(substr(.data$time_interval, 1, 4)), 
+    sex = factor(.data$sex, c("Female", "Male")),
+    age_group = factor(.data$age_group, c("0 to 19", "20 to 39", "40 to 59", "60 to 79", "80 or above"))
+  ) |>
+  dplyr::select("sex", "age_group", "year", "person_years")
+ggplot2::ggplot(data = x, mapping = ggplot2::aes(x = year, y = person_years, colour = age_group, fill = age_group)) +
+  ggplot2::geom_area() +
+  ggplot2::facet_grid(cols = ggplot2::vars(sex)) +
+  ggplot2::labs(y = "Person-years", x = "Year", colour = "Age group", fill = "Age group")
+```
+
+{{< pagebreak >}}
+
+### Clinical tables
+
+Clinical table summary is shown in the following table:
+
+```{r}
+res <- results |>
+  omopgenerics::filterSettings(.data$result_type == "summarise_clinical_records") |>
+  dplyr::filter(
+    .data$group_level != "observation_period",
+    .data$strata_name == "overall",
+    #.data$
+    .data$estimate_name %in% c("median", "q25", "q75") | .data$variable_name != "records_per_person",
+    .data$variable_name != "In observation" | .data$variable_level == "Yes",
+    .data$estimate_name != "count" | .data$variable_name == "Number records"
+  ) |>
+  dplyr::inner_join(
+    dplyr::tibble(
+      variable_name = c(
+        "Number subjects", "Number records", "records_per_person", "In observation",
+        "Standard concept", "Source vocabulary" , "Type concept id"
+      ),
+      order = c(1:7L)
+    ),
+    by = "variable_name"
+  ) |>
+  dplyr::arrange(.data$order) |>
+  dplyr::select(!"order") |>
+  dplyr::mutate(group_level = stringr::str_to_sentence(gsub("_", " ", .data$group_level)))
+
+vis2 <- function(res, tabs) {
+  res |>
+    dplyr::filter(.data$group_level %in% .env$tabs) |>
+    visOmopResults::visOmopTable(
+      estimateName = c(
+        "median [IQR]" = "<median> [<q25> - <q75>]", 
+        "%" = "<percentage>%", 
+        "N" = "<count>"
+      ), 
+      header = "omop_table", 
+      hide = c("age_group", "sex", "cdm_name"),
+      type = "gt"
+    )
+}
+
+vis2(res, c("Visit occurrence", "Condition occurrence", "Drug exposure", "Procedure occurrence"))
+vis2(res, c("Device exposure", "Measurement", "Observation", "Death"))
+```
+
+{{< pagebreak >}}
+
+### Missing data
+
+```{r, results='asis'}
+missings <- results |> 
+  omopgenerics::filterSettings(.data$result_type == "summarise_missing_data") |>
+  dplyr::filter(
+    .data$strata_name == "overall",
+    .data$estimate_name != "na_count"
+  ) |>
+  omopgenerics::tidy() |>
+  dplyr::select("omop_table", "cdm_field_name" = "variable_name", "percentage" = "na_percentage") |>
+  dplyr::filter(.data$percentage > 0) |>
+  dplyr::inner_join(
+    omopgenerics::omopTableFields() |>
+      dplyr::select("omop_table" = "cdm_table_name", "cdm_field_name", "is_required"),
+    by = c("omop_table", "cdm_field_name")
+  )
+critical <- missings |>
+  dplyr::filter(.data$is_required)
+if (nrow(critical) == 0) {
+  cat("No missings observed in compulsory columns.\n\n")
+} else {
+  cat(paste0(
+    "Found missings in critical columns: ", 
+    paste0(sprintf("%s (%.f%%)", critical$cdm_field_name, critical$percentage), collapse = "; "),
+    ".\n\n"
+  ))
+}
+```
+
+Some missing were detected in the following columns:
+
+```{r}
+missings |>
+  dplyr::mutate(field = dplyr::if_else(
+   .data$percentage < 1,
+   sprintf("%s (<1%%)", .data$cdm_field_name),
+   sprintf("%s (%.f%%)", .data$cdm_field_name, .data$percentage)
+  )) |>
+  dplyr::group_by(.data$omop_table) |>
+  dplyr::arrange(dplyr::desc(.data$percentage)) |>
+  dplyr::summarise(columns = paste0(.data$field, collapse = "; ")) |>
+  gt::gt()
+```
+
+### Full characterisation
+
+Detailed information of all the characterisation is reported: in a *ShinyApp* <https://dpa-pde-oxford.shinyapps.io/HDRUK-Characterisation/>.
+
+### Comments
+
+```{r, results='asis'}
+comments <- readLines(here::here("comments.txt"))
+idS <- which(comments == cdmName1)
+idE <- which(!startsWith(x = comments, prefix = "- "))
+idE <- dplyr::first(idE[idE > idS]) |> dplyr::coalesce(length(comments))
+cat(paste0(comments[(idS+1):idE], collapse = "\n"))
+```
