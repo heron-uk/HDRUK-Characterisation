@@ -28,9 +28,6 @@ if (!file.exists(fileData)) {
   source(file.path(getwd(), "data", "preprocess.R"))
 }
 
-# uncomment to load the raw data
-# rawData <- omopgenerics::importSummarisedResult(file.path(getwd(), "data"))
-
 # load shiny data
 load(fileData)
 
