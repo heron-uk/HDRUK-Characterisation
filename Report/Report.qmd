@@ -66,6 +66,8 @@ All benchmarks were ran successfully with the following times:
 
 Detailed information of each benchmarked task is reported: in a *ShinyApp* <https://dpa-pde-oxford.shinyapps.io/benchmark-hdruk/>.
 
+{{< pagebreak >}}
+
 ## Characterisation
 
 Characterisation successfully run for data between '2012-01-01' and '2024-12-31'.
@@ -135,7 +137,7 @@ future_observation <- demo |>
 future_observation <- sprintf("%.f", future_observation)
 ```
 
-Age (mean [standard deviation]) at start of observation (the earliest of 2012-01-01 and patient joining the database) is: `r age`. The most common age group is `r age_group` years old and `r sex`% of patients are Females. Mean prior observation and future observation are: `r prior_observation` and `r future_observation` days, respectively.
+Age (mean [standard deviation]) at start of observation (the latest of 2012-01-01 and patient joining the database) is: `r age`. The most common age group is `r age_group` years old and `r sex`% of patients are Females. Mean prior observation and future observation are: `r prior_observation` and `r future_observation` days, respectively.
 
 ### Observation period
 
@@ -149,7 +151,7 @@ inObs <- 100 * as.numeric(obs$count[obs$variable_name == "Number records"]) / as
 inObs <- sprintf("%.1f", inObs)
 medianObs <- obs$median[obs$variable_name == "Duration in days"]
 if (obs$max[obs$variable_name == "Records per person"] == 1) {
-  followingObs <- "Only a single observation period is defined by person."
+  followingObs <- "Only a single observation period is defined per person."
 } else {
   followingObs <- paste0(
     "More than one observation period defined by person with a mean of ",
@@ -195,7 +197,7 @@ res <- results |>
     .data$group_level != "observation_period",
     .data$strata_name == "overall",
     #.data$
-    .data$estimate_name %in% c("median", "q25", "q75") | .data$variable_name != "records_per_person",
+    .data$estimate_name %in% c("median", "q25", "q75", "min", "max") | .data$variable_name != "records_per_person",
     .data$variable_name != "In observation" | .data$variable_level == "Yes",
     .data$estimate_name != "count" | .data$variable_name == "Number records"
   ) |>
@@ -211,14 +213,30 @@ res <- results |>
   ) |>
   dplyr::arrange(.data$order) |>
   dplyr::select(!"order") |>
-  dplyr::mutate(group_level = stringr::str_to_sentence(gsub("_", " ", .data$group_level)))
+  dplyr::mutate(group_level = stringr::str_to_sentence(gsub("_", " ", .data$group_level))) |>
+  dplyr::mutate(variable_name = dplyr::if_else(
+    .data$variable_name == "records_per_person", "Records per person", .data$variable_name
+  )) |>
+  dplyr::mutate(variable_level = dplyr::if_else(
+    .data$variable_name == "Standard concept",
+    dplyr::case_when(
+      .data$variable_level == "S" ~ "Standard",
+      .data$variable_level == "C" ~ "Classification",
+      is.na(.data$variable_level) ~ "Non standard"
+    ),
+    .data$variable_level
+  )) |>
+  dplyr::mutate(variable_name = dplyr::if_else(
+    .data$variable_name == "Number subjects", "Present subjects", .data$variable_name
+  ))
 
 vis2 <- function(res, tabs) {
   res |>
     dplyr::filter(.data$group_level %in% .env$tabs) |>
     visOmopResults::visOmopTable(
       estimateName = c(
-        "median [IQR]" = "<median> [<q25> - <q75>]", 
+        "median [IQR]" = "<median> [<q25> - <q75>]",
+        "range" = "<min> to <max>",
         "%" = "<percentage>%", 
         "N" = "<count>"
       ), 
@@ -229,6 +247,11 @@ vis2 <- function(res, tabs) {
 }
 
 vis2(res, c("Visit occurrence", "Condition occurrence", "Drug exposure", "Procedure occurrence"))
+```
+
+{{< pagebreak >}}
+
+```{r}
 vis2(res, c("Device exposure", "Measurement", "Observation", "Death"))
 ```
 
