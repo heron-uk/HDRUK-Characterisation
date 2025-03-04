@@ -67,12 +67,17 @@ server <- function(input, output, session) {
     result <- data |>
       filterData("summarise_characteristics", input)
     result <- result |> dplyr::filter(.data$variable_name == input$summarise_characteristics_ggplot2_8_variableName)
-    CohortCharacteristics::plotCharacteristics(
+    plot <- CohortCharacteristics::plotCharacteristics(
       result,
       plotStyle = input$summarise_characteristics_ggplot2_8_plotStyle,
       facet = input$summarise_characteristics_ggplot2_8_facet,
       colour = input$summarise_characteristics_ggplot2_8_colour
     ) + ggplot2::theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    if (input$summarise_characteristics_ggplot2_8_logscale) {
+      plot <- plot + ggplot2::scale_y_log10()
+    }
+    
+    plot
   })
   output$summarise_characteristics_ggplot2_8 <- shiny::renderPlot({
     createOutput8()
@@ -317,7 +322,7 @@ server <- function(input, output, session) {
       dplyr::arrange(.data$additional_level)
     
     
-    header <- c("cdm_name", "Number records" )
+    header <- c("Number of records in observation","cdm_name" )
     group <- c("omop_table" )
     hide <- c("interval",	"study_period_end",	"study_period_start", "variable_level",	"estimate_name", "variable_name"	)
     simpleTable(
@@ -343,11 +348,17 @@ server <- function(input, output, session) {
   createOutput18 <- shiny::reactive({
     result <- data |>
       filterData("summarise_record_count", input)
-    OmopSketch::plotRecordCount(
+    plot <- OmopSketch::plotRecordCount(
       result,
       facet = input$summarise_record_count_ggplot2_16_facet, 
       colour = input$summarise_record_count_ggplot2_16_colour
     )
+    if (input$summarise_record_count_ggplot2_16_logscale) {
+      plot <- plot + ggplot2::scale_y_log10()
+    }
+    
+    plot
+    
   })
   output$summarise_record_count_ggplot2_16 <- shiny::renderPlot({
     createOutput18()
@@ -402,11 +413,22 @@ server <- function(input, output, session) {
     result <- data |>
       filterData("summarise_in_observation", input)
     result <- result |> dplyr::filter(.data$variable_name == input$summarise_in_observation_ggplot2_19_variableName)
-    OmopSketch::plotInObservation(
+    plot <- plotInObservationLocal(
       result,
       facet = input$summarise_in_observation_ggplot2_19_facet,
       colour = input$summarise_in_observation_ggplot2_19_colour
-    )
+    ) +
+      ggplot2::coord_cartesian(ylim = c(NA, NA), clip = "off")
+    if (input$summarise_in_observation_ggplot2_19_logscale) {
+      plot <- plot +
+        ggplot2::scale_y_log10() +
+        ggplot2::expand_limits(y = as.numeric(result$estimate_value)) # Force max Y limit
+    } else {
+      plot <- plot +
+        ggplot2::scale_y_continuous(expand = expansion(), limits = c(NA, NA)) +
+        ggplot2::expand_limits(y = as.numeric(result$estimate_value)) # Force max Y limit
+    }
+    plot
   })
   
   # Render the plot in the UI
@@ -460,13 +482,18 @@ server <- function(input, output, session) {
     result <- data |>
       filterData("summarise_observation_period", input)
     result <- result |> dplyr::filter(.data$variable_name == input$summarise_observation_period_ggplot2_16_variableName)
-    OmopSketch::plotObservationPeriod(
+    plot <- OmopSketch::plotObservationPeriod(
       result,
       variableName = input$summarise_observation_period_ggplot2_16_variableName,
       plotType = input$summarise_observation_period_ggplot2_16_plotType,
       facet = input$summarise_observation_period_ggplot2_16_facet, 
       colour = input$summarise_observation_period_ggplot2_16_colour
     )
+    if (input$summarise_observation_period_ggplot2_16_logscale) {
+      plot <- plot + ggplot2::scale_y_log10()
+    }
+    
+    plot
   })
   output$summarise_observation_period_ggplot2_16 <- shiny::renderPlot({
     createOutput16()

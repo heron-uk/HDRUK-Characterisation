@@ -78,7 +78,8 @@ ui <- bslib::page_navbar(
               ),
               class = "text-end"
             ),
-            gt::gt_output("summarise_omop_snapshot_gt_17")
+            gt::gt_output("summarise_omop_snapshot_gt_17")|>
+              shinycssloaders::withSpinner()
           )
         )
       )
@@ -195,7 +196,8 @@ ui <- bslib::page_navbar(
             #     ),
             #     position = "right"
             #   ),
-            gt::gt_output("summarise_characteristics_gt_7")
+            gt::gt_output("summarise_characteristics_gt_7") |>
+              shinycssloaders::withSpinner()
             
           )
         ),
@@ -266,9 +268,14 @@ ui <- bslib::page_navbar(
                   choices = c("cdm_name", "cohort_name", "sex", "age_group", "variable_name", "variable_level", "estimate_name", "table_name"),
                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                 ),
+                shiny::checkboxInput(
+                  inputId = "summarise_characteristics_ggplot2_8_logscale",
+                  label = "Log scale for Y-axis",
+                  value = FALSE),
                 position = "right"
               ),
-              shiny::plotOutput("summarise_characteristics_ggplot2_8")
+              shiny::plotOutput("summarise_characteristics_ggplot2_8")|>
+                shinycssloaders::withSpinner()
             )
           )
         )
@@ -379,7 +386,9 @@ ui <- bslib::page_navbar(
                                 ),
                                 position = "right"
                               ),
-                              DT::dataTableOutput("summarise_missing_data_tidy")
+                              DT::dataTableOutput("summarise_missing_data_tidy") |>
+                                shinycssloaders::withSpinner()
+                              
                             )
                           )
                         )
@@ -480,7 +489,8 @@ ui <- bslib::page_navbar(
                                 ),
                                 position = "right"
                               ),
-                              DT::dataTableOutput("summarise_clinical_records_tidy")
+                              DT::dataTableOutput("summarise_clinical_records_tidy")|>
+                                shinycssloaders::withSpinner()
                             )
                           )
                         ),
@@ -551,7 +561,8 @@ ui <- bslib::page_navbar(
                               ),
                               class = "text-end"
                             ),
-                            gt::gt_output("summarise_clinical_records_gt_15")
+                            gt::gt_output("summarise_clinical_records_gt_15") |>
+                              shinycssloaders::withSpinner()
                             
                           )
                         )
@@ -601,29 +612,7 @@ ui <- bslib::page_navbar(
                               inputId = "summarise_record_count_grouping_time_interval",
                               label = "Time interval",
                               choices = filterValues$summarise_record_count_grouping_time_interval,
-                              selected = "overall",
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            )
-                          ),
-                          bslib::accordion_panel(
-                            title = "Variables",
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_record_count_variable_name",
-                              label = "Variable name",
-                              choices = filterValues$summarise_record_count_variable_name,
-                              selected = filterValues$summarise_record_count_variable_name,
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            )
-                          ),
-                          bslib::accordion_panel(
-                            title = "Estimates",
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_record_count_estimate_name",
-                              label = "Estimate name",
-                              choices = filterValues$summarise_record_count_estimate_name,
-                              selected = filterValues$summarise_record_count_estimate_name,
+                              selected = filterValues$summarise_record_count_grouping_time_interval,
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             )
@@ -677,7 +666,8 @@ ui <- bslib::page_navbar(
                             #     ),
                             #     position = "right"
                             #   ),
-                            gt::gt_output("summarise_record_count_gt_0")
+                            gt::gt_output("summarise_record_count_gt_0") |>
+                              shinycssloaders::withSpinner()
                             #)
                           )
                         ),
@@ -732,9 +722,14 @@ ui <- bslib::page_navbar(
                                   choices = c("cdm_name", "age_group", "sex", "omop_table"),
                                   options = list(plugins = "remove_button")
                                 ),
+                                shiny::checkboxInput(
+                                  inputId = "summarise_record_count_ggplot2_16_logscale",
+                                  label = "Log scale for Y-axis",
+                                  value = FALSE),
                                 position = "right"
                               ),
-                              shiny::plotOutput("summarise_record_count_ggplot2_16")
+                              shiny::plotOutput("summarise_record_count_ggplot2_16") |>
+                                shinycssloaders::withSpinner()
                             )
                           )
                         )
@@ -832,7 +827,8 @@ ui <- bslib::page_navbar(
                                 ),
                                 position = "right"
                               ),
-                              DT::dataTableOutput("summarise_concept_id_counts_tidy")
+                              DT::dataTableOutput("summarise_concept_id_counts_tidy") |>
+                                shinycssloaders::withSpinner()
                             )
                           )
                         )
@@ -854,14 +850,6 @@ ui <- bslib::page_navbar(
                               label = "Cdm name",
                               choices = filterValues$summarise_in_observation_grouping_cdm_name,
                               selected = filterValues$summarise_in_observation_grouping_cdm_name,
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            ),
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_in_observation_grouping_omop_table",
-                              label = "Omop table",
-                              choices = filterValues$summarise_in_observation_grouping_omop_table,
-                              selected = filterValues$summarise_in_observation_grouping_omop_table,
                               multiple = TRUE,
                               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                             ),
@@ -961,7 +949,8 @@ ui <- bslib::page_navbar(
                             #     ),
                             #     position = "right"
                             #   ),
-                            gt::gt_output("summarise_in_observation_gt_0")
+                            gt::gt_output("summarise_in_observation_gt_0")|>
+                              shinycssloaders::withSpinner()
                             #)
                           )
                         ),
@@ -1027,9 +1016,14 @@ ui <- bslib::page_navbar(
                                   choices = c("cdm_name","sex", "age_group", "variable_name"),
                                   options = list(plugins = "remove_button")
                                 ),
+                                shiny::checkboxInput(
+                                  inputId = "summarise_in_observation_ggplot2_19_logscale",
+                                  label = "Log scale for Y-axis",
+                                  value = FALSE),
                                 position = "right"
                               ),
-                              shiny::plotOutput("summarise_in_observation_ggplot2_19")
+                              shiny::plotOutput("summarise_in_observation_ggplot2_19")|>
+                                shinycssloaders::withSpinner()
                             )
                           )
                         )
@@ -1120,7 +1114,8 @@ ui <- bslib::page_navbar(
                               ),
                               class = "text-end"
                             ),
-                            gt::gt_output("summarise_observation_period_gt_15")
+                            gt::gt_output("summarise_observation_period_gt_15")|>
+                              shinycssloaders::withSpinner()
                           )
                         ),
                         bslib::nav_panel(
@@ -1190,9 +1185,15 @@ ui <- bslib::page_navbar(
                                   choices = c("cdm_name", "observation_period_ordinal", "age_group", "sex"),
                                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                                 ),
+                                shiny::checkboxInput(
+                                  inputId = "summarise_observation_period_ggplot2_16_logscale",
+                                  label = "Log scale for Y-axis",
+                                  value = FALSE),
+                                
                                 position = "right"
                               ),
-                              shiny::plotOutput("summarise_observation_period_ggplot2_16")
+                              shiny::plotOutput("summarise_observation_period_ggplot2_16")|>
+                                shinycssloaders::withSpinner()
                             )
                           )
                         )

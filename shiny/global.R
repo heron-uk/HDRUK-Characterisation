@@ -15,6 +15,7 @@ library(purrr)
 library(readr)
 library(rlang)
 library(shiny)
+library(shinycssloaders)
 library(shinyWidgets)
 library(sortable)
 library(tidyr)
@@ -23,18 +24,12 @@ library(yaml)
 
 # preprocess data if it has not been done
 fileData <- file.path(getwd(), "data", "shinyData.RData")
-
-
 if (!file.exists(fileData)) {
   source(file.path(getwd(), "data", "preprocess.R"))
 }
 
-# uncomment to load the raw data
-# rawData <- omopgenerics::importSummarisedResult(file.path(getwd(), "data"))
-
 # load shiny data
 load(fileData)
-
 
 # source functions
 source(file.path(getwd(), "functions.R"))
