@@ -27,10 +27,6 @@ cdm <- omopgenerics::bind(
   name = "population"
 )
 
-omopgenerics::dropSourceTable(cdm = cdm, dplyr::starts_with("population_1"))
-omopgenerics::dropSourceTable(cdm = cdm, dplyr::starts_with("population_2"))
-
-
 set <- omopgenerics::settings(cdm$population) |>
   dplyr::mutate(cohort_name = tolower(dplyr::if_else(
     is.na(.data$age_range), "general_population", paste0("age_group_", .data$age_range)
@@ -50,6 +46,7 @@ result_populationCharacteristics <- cdm$population |>
       binary = c("count", "percentage")
     )
   )
+omopgenerics::dropSourceTable(cdm = cdm, c("population_1", "population_2", "population"))
 
 log_message("Summarising in observation records and person-days")
 

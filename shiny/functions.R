@@ -2,16 +2,16 @@ filterData <- function(result,
                        prefix,
                        input) {
   result <- result[[prefix]]
-
+  
   if (nrow(result) == 0) {
     return(omopgenerics::emptySummarisedResult())
   }
-
+  
   if (length(input) == 0) inputs <- character() else inputs <- names(input)
-
+  
   # subset to inputs of interest
   inputs <- inputs[startsWith(inputs, prefix)]
-
+  
   # filter settings
   set <- omopgenerics::settings(result)
   setPrefix <- paste0(c(prefix, "settings_"), collapse = "_")
@@ -25,11 +25,11 @@ filterData <- function(result,
   }
   result <- result |>
     dplyr::filter(.data$result_id %in% set$result_id)
-
+  
   if (nrow(result) == 0) {
     return(omopgenerics::emptySummarisedResult())
   }
-
+  
   # filter grouping
   cols <- c(
     "cdm_name", "group_name", "group_level", "strata_name", "strata_level",
@@ -59,7 +59,7 @@ filterData <- function(result,
         visOmopResults::uniteAdditional(cols = additionalCols),
       by = cols
     )
-
+  
   # filter variables and estimates
   nms <- c("variable_name", "estimate_name")
   nms <- nms[paste0(prefix, "_", nms) %in% inputs]
@@ -67,22 +67,22 @@ filterData <- function(result,
     result <- result |>
       dplyr::filter(.data[[nm]] %in% input[[paste0(prefix, "_", nm)]])
   }
-
+  
   # return a summarised_result
   result <- result |>
     omopgenerics::newSummarisedResult(settings = set)
-
+  
   return(result)
 }
 backgroundCard <- function(fileName) {
   # read file
   content <- readLines(fileName)
-
+  
   # extract yaml metadata
   # Find the positions of the YAML delimiters (----- or ---)
   yamlStart <- grep("^---|^-----", content)[1]
   yamlEnd <- grep("^---|^-----", content)[2]
-
+  
   if (any(is.na(c(yamlStart, yamlEnd)))) {
     metadata <- NULL
   } else {
@@ -93,10 +93,10 @@ backgroundCard <- function(fileName) {
     # eliminate yaml part from content
     content <- content[-(yamlStart:yamlEnd)]
   }
-
+  
   tmpFile <- tempfile(fileext = ".md")
   writeLines(text = content, con = tmpFile)
-
+  
   # metadata referring to keys
   backgroundKeywords <- list(
     header = "bslib::card_header",
@@ -114,7 +114,7 @@ backgroundCard <- function(fileName) {
       }
     }) |>
     purrr::compact()
-
+  
   arguments <- c(
     # metadata referring to arguments of card
     metadata[names(metadata) %in% names(formals(bslib::card))],
@@ -128,14 +128,14 @@ backgroundCard <- function(fileName) {
     ) |>
       purrr::compact()
   )
-
+  
   unlink(tmpFile)
-
+  
   do.call(bslib::card, arguments)
 }
 summaryCard <- function(result) {
   nPanels <- length(result)
-
+  
   # bind everything back
   result <- result |>
     purrr::compact() |>
@@ -145,7 +145,7 @@ summaryCard <- function(result) {
     result <- omopgenerics::emptySummarisedResult()
   }
   sets <- omopgenerics::settings(result)
-
+  
   # result overview
   nResult <- format(nrow(result), big.mark = ",")
   nSets <- format(nrow(sets), big.mark = ",")
@@ -166,7 +166,7 @@ summaryCard <- function(result) {
     "- Results contain data from **{nCdm}** different cdm objects{cdms}." |>
       glue::glue()
   )
-
+  
   # packages versions
   packageVersions <- sets |>
     dplyr::group_by(.data$package_name, .data$package_version) |>
@@ -198,7 +198,7 @@ summaryCard <- function(result) {
     dplyr::group_split() |>
     purrr::map(\(x) c(unique(x$group), x$message)) |>
     purrr::flatten_chr()
-
+  
   # result suppression
   resultSuppression <- sets |>
     dplyr::select("result_id", "min_cell_count") |>
@@ -221,7 +221,7 @@ summaryCard <- function(result) {
       )
     ) |>
     dplyr::pull("message")
-
+  
   bslib::card(
     bslib::card_header("Results summary"),
     shiny::markdown(c(
@@ -246,10 +246,7 @@ simpleTable <- function(result,
     return(gt::gt(dplyr::tibble()))
   }
   
-  result <- result |>
-    omopgenerics::addSettings() |>
-    omopgenerics::splitAll() |>
-    dplyr::select(-"result_id")
+  
   
   # format estimate column
   formatEstimates <- c(
@@ -263,24 +260,18 @@ simpleTable <- function(result,
     "N missing data (%)" = "<na_count> (<na_percentage>%)"
   )
   result <- result |>
-    visOmopResults::formatEstimateValue(
-      decimals = c(integer = 0, numeric = 1, percentage = 0)
-    ) |>
-    visOmopResults::formatEstimateName(estimateName = formatEstimates) |>
-    suppressMessages() |>
-    visOmopResults::formatHeader(header = header) |>
-    dplyr::select(!dplyr::any_of(c("estimate_type", hide)))
-  if (length(group) > 1) {
-    id <- paste0(group, collapse = "; ")
-    result <- result |>
-      tidyr::unite(col = !!id, dplyr::all_of(group), sep = "; ", remove = TRUE)
-    group <- id
-  }
+    visOmopResults::visOmopTable(
+      type = type,
+      estimateName = formatEstimates,
+      header = header,
+      hide = hide,
+      groupColumn = group, 
+      .options = list(groupAsColumn = TRUE, merge = "all_columns"
+      )
+    )|>
+    suppressMessages()
   
-  if (estimateNumeric) result <- result|>dplyr::mutate(estimate_value = suppressWarnings(dplyr::if_else(.data$estimate_value == "-", NA_integer_, as.numeric(.data$estimate_value))))
-  result <- result |>
-    visOmopResults::formatTable(groupColumn = group, type = type)
- 
+  
   return(result)
 }
 prepareResult <- function(result, resultList) {
@@ -312,11 +303,11 @@ defaultFilterValues <- function(result, resultList) {
       names(sOpts) <- glue::glue("settings_{names(sOpts)}")
       res <- result |>
         dplyr::filter(.data$result_id %in% .env$x)
-
+      
       # omopgenerics 0.4.1 should fix this
       attr(res, "settings") <- attr(res, "settings") |>
         dplyr::filter(.data$result_id %in% .env$x)
-
+      
       gOpts <- res |>
         dplyr::select(c(
           "cdm_name", "group_name", "group_level", "strata_name",
@@ -346,7 +337,7 @@ defaultFilterValues <- function(result, resultList) {
 
 
 tableClinicalRecordsLocal <- function(result,
-                                 type = "gt") {
+                                      type = "gt") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -359,10 +350,10 @@ tableClinicalRecordsLocal <- function(result,
   
   # check if it is empty
   if (nrow(result) == 0) {
-    warnEmpty("summarise_clinical_records")
     return(emptyTable(type))
   }
-  if (type=="datatable" & result |> dplyr::distinct(.data$cdm_name)|>dplyr::tally()|>dplyr::pull(n)>1) header <- c("cdm_name") else header <- NULL
+  header <- c("cdm_name")
+  if (type=="datatable" & result |> dplyr::distinct(.data$cdm_name)|>dplyr::tally()|>dplyr::pull(n)==1) header <- NULL
   
   
   result |>
@@ -374,12 +365,14 @@ tableClinicalRecordsLocal <- function(result,
         "N" = "<count>",
         "Mean (SD)" = "<mean> (<sd>)"),
       header = header,
-      groupColumn = c("omop_table", omopgenerics::strataColumns(result))
+      groupColumn = c("omop_table"), 
+      .options = list(groupAsColumn = TRUE, merge = "all_columns"
+      )
     )
 }
 
 tableObservationPeriodLocal <- function(result,
-                                   type = "gt") {
+                                        type = "gt") {
   # initial checks
   rlang::check_installed("visOmopResults")
   omopgenerics::validateResultArgument(result)
@@ -392,10 +385,9 @@ tableObservationPeriodLocal <- function(result,
   
   # check if it is empty
   if (nrow(result) == 0) {
-    warnEmpty("summarise_observation_period")
     return(emptyTable(type))
   }
-  if (type=="datatable" & result |> dplyr::distinct(.data$cdm_name)|>dplyr::tally()|>dplyr::pull(n)>1) header <- c("cdm_name") else header <- NULL
+  if (type=="datatable" & result |> dplyr::distinct(.data$cdm_name)|>dplyr::tally()|>dplyr::pull(n)==1) header <- NULL else header <- c("cdm_name") 
   
   result |>
     dplyr::filter(is.na(.data$variable_level)) |> # to remove density
@@ -410,11 +402,12 @@ tableObservationPeriodLocal <- function(result,
         "mean (sd)" = "<mean> (<sd>)",
         "median [Q25 - Q75]" = "<median> [<q25> - <q75>]"),
       header = header,
-      groupColumn = omopgenerics::strataColumns(result),
+      groupColumn = c("observation_period_ordinal"),
       hide = c(
         "result_id", "estimate_type", "strata_name", "variable_level"),
       type = type,
-      .options = list(keepNotFormatted = FALSE) # to consider removing this? If
+      .options = list(groupAsColumn = TRUE, merge = "all_columns"
+      ) # to consider removing this? If
       # the user adds some custom estimates they are not going to be displayed in
     )
 }

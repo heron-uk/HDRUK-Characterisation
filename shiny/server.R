@@ -32,7 +32,7 @@ server <- function(input, output, session) {
   
   
   # summarise_characteristics -----
-  
+ 
   createOutput7 <- shiny::reactive({
     result <- data |>
       filterData("summarise_characteristics", input)
@@ -291,8 +291,8 @@ server <- function(input, output, session) {
         readr::write_csv(file = file)
     }
   )  
-  
-  
+
+ 
   createOutput21 <- shiny::reactive({
     res <- data |>
       filterData("summarise_clinical_records", input)
@@ -313,7 +313,7 @@ server <- function(input, output, session) {
   
   
   
-  
+
   ## output summarise_record_count -----
   ## output 0 -----
   createOutput23 <- shiny::reactive({
@@ -322,7 +322,7 @@ server <- function(input, output, session) {
       dplyr::arrange(.data$additional_level)
     
     
-    header <- c("Number of records in observation","cdm_name" )
+    header <- c("Number of records in observation","cdm_name")
     group <- c("omop_table" )
     hide <- c("interval",	"study_period_end",	"study_period_start", "variable_level",	"estimate_name", "variable_name"	)
     simpleTable(
@@ -348,17 +348,17 @@ server <- function(input, output, session) {
   createOutput18 <- shiny::reactive({
     result <- data |>
       filterData("summarise_record_count", input)
-    plot <- OmopSketch::plotRecordCount(
+   plot <- OmopSketch::plotRecordCount(
       result,
       facet = input$summarise_record_count_ggplot2_16_facet, 
       colour = input$summarise_record_count_ggplot2_16_colour
     )
-    if (input$summarise_record_count_ggplot2_16_logscale) {
-      plot <- plot + ggplot2::scale_y_log10()
-    }
-    
-    plot
-    
+   if (input$summarise_record_count_ggplot2_16_logscale) {
+     plot <- plot + ggplot2::scale_y_log10()
+   }
+   
+   plot
+   
   })
   output$summarise_record_count_ggplot2_16 <- shiny::renderPlot({
     createOutput18()

@@ -116,14 +116,6 @@ ui <- bslib::page_navbar(
               selected = "overall",
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-            ),
-            shinyWidgets::pickerInput(
-              inputId = "summarise_characteristics_grouping_age_group",
-              label = "Age group",
-              choices = filterValues$summarise_characteristics_grouping_age_group,
-              selected = filterValues$summarise_characteristics_grouping_age_group,
-              multiple = TRUE,
-              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             )
           ),
           bslib::accordion_panel(
