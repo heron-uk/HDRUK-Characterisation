@@ -1,9 +1,68 @@
 Barts Health
 - A different *cdmName* was used between benchmark and characterisation, it would be nice to homogenise.
-- There are individuals deffined in the person table that does not have an associated observation period.
+- There are individuals defined in the person table that does not have an associated observation period.
 - Multiple records per person observed in death table (746k records, but only 25k individual).
 - 14% of concepts in condition occurrence are non standard concepts.
 - 19% of concepts in drug exposure are non standard concepts.
 - 72% of concepts in procedure occurrence are non standard concepts.
 - 40% of concepts in measurement are non standard concepts.
 - 8% of death records captured after observation period end date.
+
+IDRIL_1
+- Vocabulary version v5.0 09-SEP-22
+- Conditions and observations are mapped using icd10cm instead of icd10
+- 1.25% of records in condition occurence are not in observation
+- 4.25% of records in visit occurence are not in observation
+- 3% of records in measurement are not in observation
+- 23% of records in death are not in observation
+
+LTHT
+- A different *cdmName* was used between benchmark and characterisation, it would be nice to homogenise.
+- missing data in visit_occurrence_id
+- drop in number of visits in 2024
+
+UCLH-from-2019
+- Vocabulary version missing in cdm_source
+- Missing source vocabulary in : condition occurrence (100% of records),  drug_exposure (26%), procedure occurrence (100%), device exposure (100%), visits (100%), death (100%), measurement (100%)
+- 2.5% of records in condition occurence are not in observation
+- 78% of concept in condition occurrence are not standard
+- 1.4% of records in drug exposure are not in observation
+- 26% of concepts in drug exposure are not standard
+- 1% of records in procedure occurrence are not in observation
+- 0.92% of concepts in procedure occurrence are not standard
+- 0.24% of records in device exposure are not in observation
+- 0.34% of records in measurement are not in observation
+- 9.7% of concepts in measurement are not standard
+- 11.6% of records in obervation are not in observation
+- 18.7% of concepts in observation are not standard
+- 100% of records in death are not in observation
+- 100% of concepts in death are not standard
+
+
+DataLoch_Covid19
+- Different databases used for benchmark and characterisation
+- Vocabulary version v5.0 23-OCT-21
+- Missing data in visit_occurrence_id in drug exposure
+- device exposure is empty
+- observation is empty
+- 0.21% of records in visit occurence are not in observation
+- Missing source vocabulary in visit occurrence (100% of records), drug exposure (13.27%), procedure occurrence (13.15), measurement (3.42%), condition occurrence (11.69%)
+- 1.3% of records in drug exposure are not in observation
+- 13.27% of concepts in drug exposure are not standard
+- 0.05% of records in procedure occurrence are not in observation
+- 18.55% of concepts in procedure occurrence are not standard
+- 1.39% of records in measurement are not in observation
+- 64.48% of concepts in measurement are not standard
+- 3.86% of concepts in condition occurrence are not standard
+- In condition occurrence 0.44% of records have death certificate as type concept id
+- 6.17% of concepts in death are not standard
+
+AurumCDM_202409
+
+
+
+
+
+
+
+

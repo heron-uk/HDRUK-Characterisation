@@ -9,8 +9,8 @@ execute:
 
 ```{r, echo=FALSE, message=FALSE}
 source("functions.R")
-cdmName1 <- "Barts Health"
-cdmName2 <- "Barts"
+cdmName1 <- "IDRIL_1"
+cdmName2 <- "IDRIL_1"
 benchmark <- omopgenerics::importSummarisedResult(here::here("data", "benchmark")) |>
   dplyr::filter(.data$cdm_name == .env$cdmName1)
 benchmark <- benchmark |>
@@ -41,7 +41,7 @@ snapshot <- results |>
 ```{r, echo=FALSE}
 dplyr::tribble(
   ~metadata, ~value,
-  "CDM name", cdmName1,
+  "CDM name", cdmName2,
   "Source name", snapshot$estimate_value[snapshot$estimate_name == "source_name"],
   "Snapshot date", snapshot$estimate_value[snapshot$estimate_name == "snapshot_date"],
   "Data release date", snapshot$estimate_value[snapshot$estimate_name == "release_date"],
@@ -59,10 +59,10 @@ dplyr::tribble(
 
 All benchmarks were ran successfully with the following times:
 
-- General benchmark: `r benchmark$summarise_general_benchmark`.
-- *CDMConnector* benchmark: `r benchmark$summarise_cdm_connector_benchmark`.
-- *IncidencePrevalence* benchmark: `r benchmark$summarise_incidence_prevalence_benchmark`.
-- *CohortCharcateristics* benchmark: `r benchmark$summarise_cohort_characteristics_benchmark`.
+-   General benchmark: `r benchmark$summarise_general_benchmark`.
+-   *CDMConnector* benchmark: `r benchmark$summarise_cdm_connector_benchmark`.
+-   *IncidencePrevalence* benchmark: `r benchmark$summarise_incidence_prevalence_benchmark`.
+-   *CohortCharcateristics* benchmark: `r benchmark$summarise_cohort_characteristics_benchmark`.
 
 Detailed information of each benchmarked task is reported: in a *ShinyApp* <https://dpa-pde-oxford.shinyapps.io/benchmark-hdruk/>.
 
@@ -79,34 +79,26 @@ demo <- results |>
   omopgenerics::filterSettings(.data$result_type == "summarise_characteristics") |>
   omopgenerics::tidy()
 npop <- demo |>
-  dplyr::filter(.data$variable_name == "Number records", .data$sex == "overall", .data$age_group == "overall") |>
+  dplyr::filter(.data$variable_name == "Number records", .data$sex == "overall", .data$cohort_name == "general_population") |>
   dplyr::select("cohort_name", "count")
 age <- demo |>
-  dplyr::filter(.data$variable_name == "Age", .data$sex == "overall", .data$age_group == "overall") |>
-  dplyr::select("cohort_name", "mean", "sd")
-meanAge <- npop |>
-  dplyr::inner_join(age, by = "cohort_name") |>
-  dplyr::mutate(p = .data$count / sum(.data$count)) |>
-  dplyr::summarise(mean = sum(.data$mean * .data$p)) |>
-  dplyr::pull()
-sdAge <- npop |>
-  dplyr::inner_join(age, by = "cohort_name") |>
-  dplyr::mutate(p = .data$count / sum(.data$count)) |>
-  dplyr::summarise(sd = sqrt(sum((.data$sd ** 2) * (.data$p ** 2) ))) |>
-  dplyr::pull()
-age <- sprintf('%.1f [%.1f]', meanAge, sdAge)
+  dplyr::filter(.data$cohort_name == "general_population",.data$variable_name == "Age", .data$sex == "overall") |>
+  dplyr::select("mean", "sd") |>
+  dplyr::filter(!is.na(mean) & !is.na(sd))
+
+age <- sprintf('%.1f [%.1f]',age |> dplyr::pull(.data$mean), age |> dplyr::pull(.data$sd))
 age_group <- demo |>
   dplyr::filter(
-    .data$age_group != "overall",  .data$variable_name == "Number records"
+    .data$cohort_name != "general_population",  .data$variable_name == "Number records"
   ) |>
   dplyr::filter(.data$count == max(.data$count)) |>
-  dplyr::pull("age_group")
+  dplyr::pull("cohort_name")
 sex <- demo |>
   dplyr::filter(
+    .data$cohort_name == "general_population",
+    .data$sex == "overall",
     .data$variable_name == "Sex", 
-    .data$variable_level == "Male", 
-    .data$sex == "overall", 
-    .data$age_group == "overall"
+    .data$variable_level == "Female"
   ) |>
   dplyr::pull("count") |>
   sum() / sum(npop$count) * 100
@@ -115,9 +107,10 @@ prior_observation <- demo |>
   dplyr::filter(
     .data$variable_name == "Prior observation", 
     .data$sex == "overall", 
-    .data$age_group == "overall"
+    .data$cohort_name == "general_population"
   ) |>
   dplyr::select("cohort_name", "mean", "sd") |>
+  dplyr::filter(!is.na(mean) & !is.na(sd)) |>
   dplyr::inner_join(npop, by = "cohort_name") |>
   dplyr::mutate(p = .data$count / sum(.data$count)) |>
   dplyr::summarise(mean = sum(.data$mean * .data$p)) |>
@@ -127,9 +120,10 @@ future_observation <- demo |>
   dplyr::filter(
     .data$variable_name == "Future observation", 
     .data$sex == "overall", 
-    .data$age_group == "overall"
+    .data$cohort_name == "general_population"
   ) |>
   dplyr::select("cohort_name", "mean", "sd") |>
+  dplyr::filter(!is.na(mean) & !is.na(sd)) |>
   dplyr::inner_join(npop, by = "cohort_name") |>
   dplyr::mutate(p = .data$count / sum(.data$count)) |>
   dplyr::summarise(mean = sum(.data$mean * .data$p)) |>
@@ -137,7 +131,7 @@ future_observation <- demo |>
 future_observation <- sprintf("%.f", future_observation)
 ```
 
-Age (mean [standard deviation]) at start of observation (the latest of 2012-01-01 and patient joining the database) is: `r age`. The most common age group is `r age_group` years old and `r sex`% of patients are Females. Mean prior observation and future observation are: `r prior_observation` and `r future_observation` days, respectively.
+Age (mean \[standard deviation\]) at start of observation (the latest of 2012-01-01 and patient joining the database) is: `r age`. The most common age group is `r age_group` years old and `r sex`% of patients are Females. Mean prior observation and future observation are: `r prior_observation` and `r future_observation` days, respectively.
 
 ### Observation period
 
@@ -166,6 +160,7 @@ if (obs$max[obs$variable_name == "Records per person"] == 1) {
 A total of `r nObs` observation periods are defined in observation period table, `r inObs`% of them started within our characterisation period. The median length of these observation periods is `r medianObs` days. `r followingObs`
 
 In the following figure we can see the amount of follow-up stratified by age group, sex and year:
+
 ```{r, dpi=300, fig.width=7}
 x <- results |> 
   omopgenerics::filterSettings(.data$result_type == "summarise_in_observation") |>
@@ -310,8 +305,10 @@ Detailed information of all the characterisation is reported: in a *ShinyApp* <h
 
 ```{r, results='asis'}
 comments <- readLines(here::here("comments.txt"))
-idS <- which(comments == cdmName1)
+idS <- which(comments == cdmName2)
 idE <- which(!startsWith(x = comments, prefix = "- "))
 idE <- dplyr::first(idE[idE > idS]) |> dplyr::coalesce(length(comments))
+if (length(comments)){
 cat(paste0(comments[(idS+1):idE], collapse = "\n"))
+}
 ```
