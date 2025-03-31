@@ -104,8 +104,8 @@ ui <- bslib::page_navbar(
             shinyWidgets::pickerInput(
               inputId = "summarise_characteristics_grouping_cohort_name",
               label = "Cohort name",
-              choices = filterValues$summarise_characteristics_grouping_cohort_name,
-              selected = filterValues$summarise_characteristics_grouping_cohort_name,
+              choices = c("general_population", "age_group_0_19", "age_group_20_39", "age_group_40_59", "age_group_60_79", "age_group_80_inf" ),
+              selected = c("general_population", "age_group_0_19", "age_group_20_39", "age_group_40_59", "age_group_60_79", "age_group_80_inf" ),
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
@@ -380,7 +380,7 @@ ui <- bslib::page_navbar(
                               ),
                               DT::dataTableOutput("summarise_missing_data_tidy") |>
                                 shinycssloaders::withSpinner()
-                              
+                                
                             )
                           )
                         )
@@ -727,107 +727,8 @@ ui <- bslib::page_navbar(
                         )
                       )
                     )
-                  ),
-                  bslib::nav_panel(
-                    title = "Concept_id counts",
-                    bslib::layout_sidebar(
-                      sidebar = bslib::sidebar(
-                        bslib::accordion(
-                          bslib::accordion_panel(
-                            title = "Grouping",
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_concept_id_counts_grouping_cdm_name",
-                              label = "Cdm name",
-                              choices = filterValues$summarise_concept_id_counts_grouping_cdm_name,
-                              selected = filterValues$summarise_concept_id_counts_grouping_cdm_name,
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            ),
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_concept_id_counts_grouping_omop_table",
-                              label = "Omop table",
-                              choices = filterValues$summarise_concept_id_counts_grouping_omop_table,
-                              selected = c("drug_exposure"),
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            ),
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_concept_id_counts_grouping_age_group",
-                              label = "Age group",
-                              choices = filterValues$summarise_concept_id_counts_grouping_age_group,
-                              selected = "overall",
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            ),
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_concept_id_counts_grouping_sex",
-                              label = "Sex",
-                              choices = filterValues$summarise_concept_id_counts_grouping_sex,
-                              selected = "overall",
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            ),
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_concept_id_counts_grouping_year",
-                              label = "Year",
-                              choices = filterValues$summarise_concept_id_counts_grouping_year,
-                              selected = "overall",
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            )
-                          ),
-                          bslib::accordion_panel(
-                            title = "Estimates",
-                            shinyWidgets::pickerInput(
-                              inputId = "summarise_concept_id_counts_estimate_name",
-                              label = "Estimate name",
-                              choices = filterValues$summarise_concept_id_counts_estimate_name,
-                              selected = filterValues$summarise_concept_id_counts_estimate_name,
-                              multiple = TRUE,
-                              options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                            )
-                          )
-                        )
-                      ),
-                      bslib::navset_card_tab(
-                        bslib::nav_panel(
-                          title = "Tidy",
-                          bslib::card(
-                            full_screen = TRUE,
-                            bslib::card_header(
-                              bslib::popover(
-                                shiny::icon("download"),
-                                shiny::downloadButton(outputId = "summarise_concept_id_counts_tidy_download", label = "Download csv")
-                              ),
-                              class = "text-end"
-                            ),
-                            bslib::layout_sidebar(
-                              sidebar = bslib::sidebar(
-                                shinyWidgets::pickerInput(
-                                  inputId = "summarise_concept_id_counts_tidy_columns",
-                                  label = "Columns",
-                                  choices = c("cdm_name",	"omop_table",	"age_group","sex",	"year",	"variable_name","variable_level",	"estimate_name", "estimate_value"),
-                                  selected = filterValues$summarise_concept_id_counts_tidy_columns,
-                                  multiple = TRUE,
-                                  options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                                ),
-                                shiny::radioButtons(
-                                  inputId = "summarise_concept_id_counts_tidy_pivot",
-                                  label = "Pivot estimates/variables",
-                                  choices = c("none", "estimates"),
-                                  selected = "none"
-                                ),
-                                position = "right"
-                              ),
-                              DT::dataTableOutput("summarise_concept_id_counts_tidy") |>
-                                shinycssloaders::withSpinner()
-                            )
-                          )
-                        )
-                      )
-                    )
                   )
-  ),
+                  ),
   bslib::nav_menu(title = "Observation period", 
                   icon = shiny::icon("eye"),
                   bslib::nav_panel(
@@ -1087,7 +988,7 @@ ui <- bslib::page_navbar(
                         )
                       ),
                       bslib::navset_card_tab(
-                        
+            
                         bslib::nav_panel(
                           title = "Formatted",
                           bslib::card(
@@ -1106,8 +1007,8 @@ ui <- bslib::page_navbar(
                               ),
                               class = "text-end"
                             ),
-                            gt::gt_output("summarise_observation_period_gt_15")|>
-                              shinycssloaders::withSpinner()
+                           gt::gt_output("summarise_observation_period_gt_15")|>
+                             shinycssloaders::withSpinner()
                           )
                         ),
                         bslib::nav_panel(
