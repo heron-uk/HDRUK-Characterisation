@@ -67,12 +67,23 @@ server <- function(input, output, session) {
     result <- data |>
       filterData("summarise_characteristics", input)
     result <- result |> dplyr::filter(.data$variable_name == input$summarise_characteristics_ggplot2_8_variableName)
-    plot <- CohortCharacteristics::plotCharacteristics(
-      result,
-      plotStyle = input$summarise_characteristics_ggplot2_8_plotStyle,
-      facet = input$summarise_characteristics_ggplot2_8_facet,
-      colour = input$summarise_characteristics_ggplot2_8_colour
-    ) + ggplot2::theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    if (input$summarise_characteristics_ggplot2_8_plotStyle == "densityplot"){
+      plot <- visOmopResults::scatterPlot(result, 
+                                          x = "density_x",
+                                          y = "density_y",
+                                          line = TRUE,
+                                          point = FALSE,
+                                          ribbon = FALSE,
+                                          facet = input$summarise_characteristics_ggplot2_8_facet,
+                                          colour = input$summarise_characteristics_ggplot2_8_colour)
+    } else {
+      plot <- CohortCharacteristics::plotCharacteristics(
+        result,
+        plotStyle = input$summarise_characteristics_ggplot2_8_plotStyle,
+        facet = input$summarise_characteristics_ggplot2_8_facet,
+        colour = input$summarise_characteristics_ggplot2_8_colour
+      ) }
+    plot <- plot + ggplot2::theme(axis.text.x = element_text(angle = 90, hjust = 1))
     if (input$summarise_characteristics_ggplot2_8_logscale) {
       plot <- plot + ggplot2::scale_y_log10()
     }
