@@ -76,8 +76,8 @@ if (characterisation) {
   result_missingData <- OmopSketch::summariseMissingData(cdm ,
                                                          omopTableName = c("person", tableName), 
                                                          sex = sex, 
-                                                         ageGroup = ageGroup, 
-                                                         year = TRUE, 
+                                                         ageGroup = ageGroup,
+                                                         interval = "years", 
                                                          dateRange = dateRange)
   
   # Summarise clinical records
@@ -124,7 +124,7 @@ if (conceptCounts) {
                                                                 omopTableName = tableName, 
                                                                 sex = sex, 
                                                                 ageGroup = ageGroup, 
-                                                                year = TRUE, 
+                                                                interval = "years", 
                                                                 dateRange = dateRange)
 } else {
   log_message("Skipping concept id counts")

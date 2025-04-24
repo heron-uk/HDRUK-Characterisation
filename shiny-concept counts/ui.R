@@ -126,9 +126,9 @@ ui <- bslib::page_navbar(
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
             ),
             shinyWidgets::pickerInput(
-              inputId = "summarise_concept_id_counts_grouping_year",
-              label = "Year",
-              choices = filterValues$summarise_concept_id_counts_grouping_year,
+              inputId = "summarise_concept_id_counts_grouping_time_interval",
+              label = "Time interval",
+              choices = filterValues$summarise_concept_id_counts_grouping_time_interval,
               selected = "overall",
               multiple = TRUE,
               options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
