@@ -99,7 +99,7 @@ if (characterisation) {
   # Summarize in observation records
   log_message("Summarising in observation records and person-days")
   result_inObservation <- OmopSketch::summariseInObservation(cdm$observation_period, 
-                                                             output = c("records","person-days"), 
+                                                             output = c("record","person-days"), 
                                                              interval = "years",
                                                              sex = sex,
                                                              ageGroup = ageGroup,
@@ -130,6 +130,7 @@ if (conceptCounts) {
   log_message("Skipping concept id counts")
 }
 
+log_message("Binding results")
 # bind results
 results <- list(snapshot)
 if (characterisation) {
@@ -145,7 +146,8 @@ if (conceptCounts) {
 results <- omopgenerics::bind(results)
 
 # Export results
-omopgenerics::exportSummarisedResult(result, minCellCount = minCellCount, path = outputFolder, fileName = paste0(
+log_message("Export results")
+omopgenerics::exportSummarisedResult(results, minCellCount = minCellCount, path = outputFolder, fileName = paste0(
   "result_characterisation_", dbName, ".csv"))
 
 # Calculate duration and log
