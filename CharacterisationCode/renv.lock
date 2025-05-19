@@ -267,15 +267,14 @@
     },
     "OmopSketch": {
       "Package": "OmopSketch",
-      "Version": "0.3.2.900",
-      "Source": "GitHub",
+      "Version": "0.4.0",
+      "Source": "Repository",
       "Title": "Characterise Tables of an OMOP Common Data Model Instance",
       "Authors@R": "c( person(  \"Marta\", \"Alcalde-Herraiz\",  email = \"marta.alcaldeherraiz@ndorms.ox.ac.uk\", role = c(\"aut\"),  comment = c(ORCID = \"0009-0002-4405-1814\") ), person( \"Kim\", \"Lopez-Guell\", email = \"kim.lopez@spc.ox.ac.uk\", role = c(\"aut\"), comment = c(ORCID = \"0000-0002-8462-8668\") ), person( \"Elin\", \"Rowlands\", email = \"elin.rowlands@ndorms.ox.ac.uk\",  role = c(\"aut\"), comment = c(ORCID = \"0009-0005-5166-0417\") ), person( \"Cecilia\", \"Campanile\", email = \"cecilia.campanile@ndorms.ox.ac.uk\",  role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0009-0007-6629-4661\") ), person( \"Edward\", \"Burn\", email = \"edward.burn@ndorms.ox.ac.uk\",  role = c(\"aut\"), comment = c(ORCID = \"0000-0002-9286-1128\") ), person( \"Martí\", \"Català\", email = \"marti.catalasabate@ndorms.ox.ac.uk\",  role = c(\"aut\"), comment = c(ORCID = \"0000-0003-3308-9905\") ))",
       "Maintainer": "Cecilia Campanile <cecilia.campanile@ndorms.ox.ac.uk>",
       "Description": "Summarises key information in data mapped to the Observational  Medical Outcomes Partnership (OMOP) common data model. Assess suitability to  perform specific epidemiological studies and explore the different domains to obtain feasibility counts and trends.",
       "License": "Apache License (>= 2)",
       "Encoding": "UTF-8",
-      "Roxygen": "list(markdown = TRUE)",
       "RoxygenNote": "7.3.2",
       "Suggests": [
         "CodelistGenerator",
@@ -299,7 +298,8 @@
         "omock (>= 0.3.0)",
         "covr",
         "ggplot2",
-        "visOmopResults (>= 0.5.0)"
+        "visOmopResults (>= 0.5.0)",
+        "devtools"
       ],
       "Config/testthat/edition": "3",
       "Config/testthat/parallel": "true",
@@ -325,15 +325,9 @@
       "URL": "https://OHDSI.github.io/OmopSketch/",
       "BugReports": "https://github.com/OHDSI/OmopSketch/issues",
       "VignetteBuilder": "knitr",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "OmopSketch",
-      "RemoteUsername": "ohdsi",
-      "RemotePkgRef": "ohdsi/OmopSketch",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "cefc7bef13ee07f75fe02580a3d743b7c79260f5",
       "NeedsCompilation": "no",
-      "Author": "Marta Alcalde-Herraiz [aut] (<https://orcid.org/0009-0002-4405-1814>), Kim Lopez-Guell [aut] (<https://orcid.org/0000-0002-8462-8668>), Elin Rowlands [aut] (<https://orcid.org/0009-0005-5166-0417>), Cecilia Campanile [aut, cre] (<https://orcid.org/0009-0007-6629-4661>), Edward Burn [aut] (<https://orcid.org/0000-0002-9286-1128>), Martí Català [aut] (<https://orcid.org/0000-0003-3308-9905>)"
+      "Author": "Marta Alcalde-Herraiz [aut] (ORCID: <https://orcid.org/0009-0002-4405-1814>), Kim Lopez-Guell [aut] (ORCID: <https://orcid.org/0000-0002-8462-8668>), Elin Rowlands [aut] (ORCID: <https://orcid.org/0009-0005-5166-0417>), Cecilia Campanile [aut, cre] (ORCID: <https://orcid.org/0009-0007-6629-4661>), Edward Burn [aut] (ORCID: <https://orcid.org/0000-0002-9286-1128>), Martí Català [aut] (ORCID: <https://orcid.org/0000-0003-3308-9905>)",
+      "Repository": "CRAN"
     },
     "PatientProfiles": {
       "Package": "PatientProfiles",
