@@ -48,7 +48,7 @@ characterisePersonTable <- function(cdm) {
           dplyr::rename("variable_level" = dplyr::all_of(column)) |>
           dplyr::arrange(.data$variable_level) |>
           dplyr::mutate(variable_name = .env$variable_name, 
-                        variable_level = sprintf("%i", .data$variable_level))
+                        variable_level = sprintf("%i", round(.data$variable_level)))
       } else {
         cli::cli_inform(c("!" = "Column: {column} not found in person table."))
         NULL
@@ -57,14 +57,18 @@ characterisePersonTable <- function(cdm) {
     purrr::compact() |>
     dplyr::bind_rows() |>
     dplyr::mutate(
-      count = as.integer(.data$count),
       percentage = 100 * as.numeric(.data$count) / .env$subjects,
+      count = as.integer(.data$count)
     )
   
   # build result
   additionalCols <- c("concept_name", "location_source_value", "care_site_name")
   additionalCols <- additionalCols[additionalCols %in% colnames(result)]
   result <- result |>
+    dplyr::mutate(dplyr::across(
+      dplyr::all_of(additionalCols),
+      \(x) dplyr::coalesce(x, "missing")
+    )) |>
     dplyr::mutate(
       omop_table = "person",
       cdm_name = omopgenerics::cdmName(cdm),
